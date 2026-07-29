@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 탐정단 가이드: 생성형 AI 슬기롭게 활용하기</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Pretendard', system-ui, -apple-system, sans-serif; }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        
+        .detective-glow {
+            box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.3);
+        }
+
+        .badge-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col selection:bg-emerald-500 selection:text-white">
+
+    <header class="border-b border-slate-800 bg-slate-950/80 sticky top-0 z-40 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <a href="../index.html" title="홈으로 이동" class="w-10 h-10 bg-slate-900 hover:bg-emerald-500/20 border border-slate-700 hover:border-emerald-500/50 rounded-xl flex items-center justify-center text-slate-300 hover:text-emerald-400 text-base transition duration-200">
+                    <i class="fa-solid fa-house"></i>
+                </a>
+                <div class="w-12 h-12 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl flex items-center justify-center text-emerald-400 text-2xl shadow-inner">
+                    <i class="fa-solid fa-user-secret"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <h1 class="text-xl font-extrabold text-white tracking-tight">AI 탐정단 본부</h1>
+                        <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs px-2.5 py-0.5 rounded-full font-semibold">가이드 v2.0</span>
+                    </div>
+                    <p class="text-xs text-slate-400">생성형 AI를 똑똑하고 슬기롭게 활용하는 5가지 특급 법칙</p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-4 md:space-x-6">
+                <a href="../index.html" class="flex items-center space-x-2 px-3.5 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/50 rounded-xl text-slate-300 hover:text-emerald-400 text-xs font-semibold transition duration-200">
+                    <i class="fa-solid fa-house"></i>
+                    <span>홈으로</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-6">
+                    <div class="text-right">
+                        <div class="text-xs text-slate-400">나의 탐정 등급</div>
+                        <div class="text-sm font-bold text-emerald-400 flex items-center justify-end gap-1">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <span id="detective-rank-text">견습 탐정</span>
+                        </div>
+                    </div>
+                    <div class="w-32 bg-slate-800 rounded-full h-3 p-0.5 border border-slate-700">
+                        <div id="progress-bar" class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: 20%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+        
+        <section class="relative rounded-3xl bg-gradient-to-r from-emerald-950 via-slate-900 to-indigo-950 p-8 md:p-12 border border-emerald-500/20 overflow-hidden shadow-2xl">
+            <div class="absolute -right-10 -bottom-10 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="relative z-10 max-w-3xl">
+                <div class="inline-flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs px-3 py-1 rounded-full mb-4">
+                    <i class="fa-solid fa-compass animate-spin" style="animation-duration: 8s;"></i>
+                    <span>AI 시대의 필수 역량: 비판적 사고와 보안 수칙</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white leading-tight mb-4">
+                    기술에 끌려다니지 않고,<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">혁신을 주도하는 슬기로운 AI 탐정</span>이 되세요!
+                </h2>
+                <p class="text-slate-300 text-base sm:text-lg leading-relaxed mb-6">
+                    생성형 AI는 강력한 파트너이지만 환각(Hallucination), 데이터 편향, 보안 위험을 동반합니다. 
+                    핵심 5대 원칙을 익히고 실전 테스트를 수행하여 최고의 AI 탐정 배지를 획득하세요.
+                </p>
+                <div class="flex flex-wrap gap-3">
+                    <button onclick="switchTab('principles')" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl transition duration-200 flex items-center space-x-2 shadow-lg shadow-emerald-500/20">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span>5대 원칙 탐색하기</span>
+                    </button>
+                    <button onclick="switchTab('quiz')" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-xl border border-slate-700 transition duration-200 flex items-center space-x-2">
+                        <i class="fa-solid fa-gamepad text-emerald-400"></i>
+                        <span>실전 사례 미션 도전</span>
+                    </button>
+                </div>
+
+                <div class="flex flex-wrap gap-2 pt-3 border-t border-slate-800/60 mt-4">
+                    <a href="03_AI 스토리 영상 제작.pdf" download="03_AI 스토리 영상 제작.pdf" onclick="showToast('03_AI 스토리 영상 제작.pdf 다운로드를 시작합니다.')" class="px-4 py-2 bg-slate-800/90 hover:bg-slate-700 hover:border-amber-500/50 text-slate-200 text-xs font-semibold rounded-xl border border-slate-700 transition duration-200 flex items-center space-x-2 shadow-sm">
+                        <i class="fa-solid fa-file-pdf text-amber-400 text-sm"></i>
+                        <span>발표자료 다운로드</span>
+                    </a>
+                    <button onclick="openResourceModal('infographic')" class="px-4 py-2 bg-slate-800/90 hover:bg-slate-700 hover:border-cyan-500/50 text-slate-200 text-xs font-semibold rounded-xl border border-slate-700 transition duration-200 flex items-center space-x-2 shadow-sm">
+                        <i class="fa-solid fa-chart-pie text-cyan-400 text-sm"></i>
+                        <span>인포그래픽보기</span>
+                    </button>
+                    <button onclick="openResourceModal('video')" class="px-4 py-2 bg-slate-800/90 hover:bg-slate-700 hover:border-rose-500/50 text-slate-200 text-xs font-semibold rounded-xl border border-slate-700 transition duration-200 flex items-center space-x-2 shadow-sm">
+                        <i class="fa-solid fa-circle-play text-rose-400 text-sm"></i>
+                        <span>동영상보기</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <div class="flex border-b border-slate-800 overflow-x-auto space-x-2 scrollbar-none pb-2">
+            <button id="tab-btn-principles" onclick="switchTab('principles')" class="tab-btn active px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center space-x-2 bg-emerald-500 text-slate-950 shadow-md">
+                <i class="fa-solid fa-list-check"></i>
+                <span>1. 5대 핵심 원칙</span>
+            </button>
+            <button id="tab-btn-checklist" onclick="switchTab('checklist')" class="tab-btn px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center space-x-2 text-slate-400 hover:text-white hover:bg-slate-800">
+                <i class="fa-solid fa-shield-cat"></i>
+                <span>2. 보안 & 검증 점검표</span>
+            </button>
+            <button id="tab-btn-quiz" onclick="switchTab('quiz')" class="tab-btn px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center space-x-2 text-slate-400 hover:text-white hover:bg-slate-800">
+                <i class="fa-solid fa-brain"></i>
+                <span>3. 실전 사건 시뮬레이션</span>
+            </button>
+            <button id="tab-btn-tools" onclick="switchTab('tools')" class="tab-btn px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center space-x-2 text-slate-400 hover:text-white hover:bg-slate-800">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>4. 프롬프트 & 인용 템플릿</span>
+            </button>
+        </div>
+
+        <section id="tab-content-principles" class="tab-content space-y-6">
+            <div class="flex justify-between items-end mb-2">
+                <div>
+                    <h3 class="text-2xl font-bold text-white">생성형 AI 활용 5대 특급 계명</h3>
+                    <p class="text-slate-400 text-sm mt-1">각 카드를 클릭하여 3단계 방어술과 구체적 활용 지침을 확인하세요.</p>
+                </div>
+                <div class="text-xs text-slate-500 hidden sm:block">클릭 시 카드 세부 정보가 열립니다.</div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div onclick="openModal('verification')" class="cursor-pointer group bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-emerald-500/50 p-6 rounded-2xl transition duration-300 flex flex-col justify-between shadow-lg relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-emerald-500"></div>
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-lg border border-emerald-500/20">01</span>
+                            <i class="fa-solid fa-square-check text-slate-600 group-hover:text-emerald-400 text-xl transition"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-2 group-hover:text-emerald-300 transition">철저한 검증</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            AI의 답변은 확정적 사실이 아닌 '가설'로 간주하세요. 논문, 정부 보고서 등 1차 자료로 교차 검증해야 합니다.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-700/50 flex justify-between items-center text-xs text-emerald-400 font-semibold">
+                        <span>3단계 팩트체크 방어술</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div onclick="openModal('transparency')" class="cursor-pointer group bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-blue-500/50 p-6 rounded-2xl transition duration-300 flex flex-col justify-between shadow-lg relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-blue-500"></div>
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold text-lg border border-blue-500/20">02</span>
+                            <i class="fa-solid fa-quote-left text-slate-600 group-hover:text-blue-400 text-xl transition"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-2 group-hover:text-blue-300 transition">투명한 공개</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            AI 활용 사실을 정직하게 표기하세요. 사용 모델명, 질의 프롬프트, 검증 과정을 기록하는 것이 탐정의 윤리입니다.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-700/50 flex justify-between items-center text-xs text-blue-400 font-semibold">
+                        <span>표준 인용 및 출처 양식</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div onclick="openModal('security')" class="cursor-pointer group bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-amber-500/50 p-6 rounded-2xl transition duration-300 flex flex-col justify-between shadow-lg relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-amber-500"></div>
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-lg border border-amber-500/20">03</span>
+                            <i class="fa-solid fa-user-shield text-slate-600 group-hover:text-amber-400 text-xl transition"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-2 group-hover:text-amber-300 transition">철통 보안</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            개인정보 및 기밀 데이터는 입력 금지! 가명화 처리, 대화 이력 관리, 다중 인증(MFA)으로 정보를 방어하세요.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-700/50 flex justify-between items-center text-xs text-amber-400 font-semibold">
+                        <span>5대 보안 수칙 가이드</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div onclick="openModal('ethics')" class="cursor-pointer group bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-rose-500/50 p-6 rounded-2xl transition duration-300 flex flex-col justify-between shadow-lg relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-rose-500"></div>
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center font-bold text-lg border border-rose-500/20">04</span>
+                            <i class="fa-solid fa-scale-balanced text-slate-600 group-hover:text-rose-400 text-xl transition"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-2 group-hover:text-rose-300 transition">편향 경계</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            AI는 과거의 축적된 데이터를 학습합니다. 성별, 인종, 문화적 고정관념이나 편향이 섞여있지 않은지 감시하세요.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-700/50 flex justify-between items-center text-xs text-rose-400 font-semibold">
+                        <span>윤리적 편향 필터링</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div onclick="openModal('agency')" class="cursor-pointer group bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-purple-500/50 p-6 rounded-2xl transition duration-300 flex flex-col justify-between shadow-lg relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-purple-500"></div>
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center font-bold text-lg border border-purple-500/20">05</span>
+                            <i class="fa-solid fa-pen-nib text-slate-600 group-hover:text-purple-400 text-xl transition"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-2 group-hover:text-purple-300 transition">주체적 학습</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            AI 답변의 단순 복사-붙여넣기는 금물입니다. 나만의 언어로 다시 쓰는 'Rewriting'과 비판적 주체성을 지키세요.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-700/50 flex justify-between items-center text-xs text-purple-400 font-semibold">
+                        <span>Rewriting 실천 기술</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                    </div>
+                </div>
+
+                <!-- Card Promise -->
+                <div class="bg-gradient-to-br from-emerald-900/60 to-slate-900 border border-emerald-500/30 p-6 rounded-2xl flex flex-col justify-center items-center text-center shadow-lg relative">
+                    <div class="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 text-2xl mb-4 badge-pulse">
+                        <i class="fa-solid fa-certificate"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-white mb-2">탐정단의 선서</h4>
+                    <p class="text-slate-300 text-xs leading-relaxed max-w-xs">
+                        "우리는 AI를 주도적으로 조종하며, 정직함과 윤리적 검증을 통해 지식 탐구의 가치를 높인다."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-content-checklist" class="tab-content hidden space-y-6">
+            <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-6 sm:p-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-6 border-b border-slate-700">
+                    <div>
+                        <h3 class="text-2xl font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-emerald-400"></i>
+                            AI 탐정 자가 안전 점검표
+                        </h3>
+                        <p class="text-slate-400 text-sm mt-1">생성형 AI를 사용하기 전 필수 확인 사항들을 직접 체크해보세요.</p>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-700 px-5 py-3 rounded-xl flex items-center space-x-4">
+                        <div class="text-right">
+                            <div class="text-xs text-slate-400">점검 완수율</div>
+                            <div id="checklist-score" class="text-xl font-black text-emerald-400">0%</div>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold">
+                            <i class="fa-solid fa-shield"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4" id="checklist-items">
+                    <!-- Dynamic Checkboxes initialized by JS -->
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-content-quiz" class="tab-content hidden space-y-6">
+            <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-6 sm:p-8 relative">
+                <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-700">
+                    <div>
+                        <h3 class="text-2xl font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-mask text-emerald-400"></i>
+                            실전 사건 시뮬레이션
+                        </h3>
+                        <p class="text-slate-400 text-sm">실제 AI 사용 시 발생할 수 있는 모험과 문제 상황을 해결하세요.</p>
+                    </div>
+                    <span id="quiz-progress" class="text-xs font-semibold bg-slate-900 border border-slate-700 text-slate-300 px-3 py-1 rounded-lg">
+                        문제 1 / 4
+                    </span>
+                </div>
+
+                <div id="quiz-container">
+                    <!-- Interactive quiz rendered by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-content-tools" class="tab-content hidden space-y-6">
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Tool 1: Verification Prompt Generator -->
+                <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg border border-emerald-500/20">
+                                <i class="fa-solid fa-terminal"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-bold text-white">팩트체크 요구 프롬프트 생성기</h4>
+                                <p class="text-xs text-slate-400">AI에게 근거와 출처를 요구할 때 사용할 프롬프트</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">질문할 주제/내용</label>
+                                <input type="text" id="prompt-topic" placeholder="예: 생성형 AI의 에너지 소비 및 환경적 영향" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">검증 레벨</label>
+                                <select id="prompt-level" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                                    <option value="strict">엄격 (공식 보고서 및 논문 저자, 출판연도 요구)</option>
+                                    <option value="moderate">표준 (주요 통계 출처 및 기관명 표기)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs font-mono text-emerald-300 relative group">
+                            <div id="generated-prompt-output" class="whitespace-pre-wrap leading-relaxed">
+[프롬프트 예시] 주제에 대해 설명하되, 모든 핵심 주장 뒤에 (1) 공식 발표 기관, (2) 정확한 보고서명, (3) 해당 수치의 산출 연도를 함께 명시해줘. 불확실한 정보는 추측하지 말고 '정보 부족'으로 표시해.
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="copyPrompt()" class="mt-4 w-full py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl transition text-sm flex items-center justify-center gap-2">
+                        <i class="fa-regular fa-copy"></i>
+                        <span>프롬프트 복사하기</span>
+                    </button>
+                </div>
+
+                <!-- Tool 2: Citation Format Template -->
+                <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-lg border border-blue-500/20">
+                                <i class="fa-solid fa-file-invoice"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-bold text-white">AI 인용 표기 생성기</h4>
+                                <p class="text-xs text-slate-400">보고서 및 논문에 첨부할 AI 표준 인용 양식</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-300 mb-1">사용 AI 서비스</label>
+                                    <input type="text" id="cite-model" value="ChatGPT (GPT-4o)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-300 mb-1">제작 회사</label>
+                                    <input type="text" id="cite-company" value="OpenAI" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">사용한 날짜</label>
+                                <input type="text" id="cite-date" value="2026년 7월 29일" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200">
+                            </div>
+                        </div>
+
+                        <div class="mt-4 bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs font-mono text-blue-300">
+                            <div id="citation-output" class="whitespace-pre-wrap leading-relaxed">
+[APA 스타일 예시]
+OpenAI. (2026). ChatGPT (GPT-4o) [대규모 언어 모델]. https://chatgpt.com 에 의해 생성된 자료를 바탕으로 작성자가 직접 1차 사료(DBpia 연구자료)와 교차 검증을 완료함.
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="copyCitation()" class="mt-4 w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition text-sm flex items-center justify-center gap-2">
+                        <i class="fa-regular fa-copy"></i>
+                        <span>인용문 복사하기</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-2xl w-full p-6 sm:p-8 relative shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div id="modal-body" class="space-y-6">
+                <!-- Modal content injected dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-emerald-500 text-slate-950 font-bold px-5 py-3 rounded-xl shadow-2xl opacity-0 transition-opacity duration-300 pointer-events-none z-50 flex items-center space-x-2">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toast-msg">클립보드에 복사되었습니다!</span>
+    </div>
+
+    <script>
+        // Data Store for Modals
+        const modalData = {
+            verification: {
+                title: "🔍 3단계 팩트 체크 방어술",
+                badge: "원칙 01 - 철저한 검증",
+                color: "emerald",
+                content: `
+                    <div class="space-y-4">
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            AI가 제시한 정보나 통계 수치는 환각(Hallucination)일 가능성이 언제나 존재합니다. 탐정의 3단계 가설 검증 프로세스를 준수하세요.
+                        </p>
+                        
+                        <div class="space-y-3 pt-2">
+                            <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-700 flex gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 font-bold">1</div>
+                                <div>
+                                    <h5 class="text-sm font-bold text-white">근거 요구 (Prompting Evidence)</h5>
+                                    <p class="text-xs text-slate-400 mt-1">AI에게 답변의 출처가 되는 공식 기관명, 학술 논문 제목, 연도를 명시하도록 직접 프롬프트로 지시하세요.</p>
+                                </div>
+                            </div>
+
+                            <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-700 flex gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 font-bold">2</div>
+                                <div>
+                                    <h5 class="text-sm font-bold text-white">1차 자료 직접 검색 (Primary Source Verification)</h5>
+                                    <p class="text-xs text-slate-400 mt-1">정부 공식 포털, DBpia, RISS, Google Scholar, 교과서 등 검증된 1차 학술/공공 DB에서 직접 문헌을 교차 검색하세요.</p>
+                                </div>
+                            </div>
+
+                            <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-700 flex gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 font-bold">3</div>
+                                <div>
+                                    <h5 class="text-sm font-bold text-white">비판적 논리 검토 (Critical Logic Check)</h5>
+                                    <p class="text-xs text-slate-400 mt-1">수치의 단위 오류, 논리적 비약, 통계적 상관관계와 인과관계의 혼동을 인간의 주체적 비판 사고로 검증하세요.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            transparency: {
+                title: "✨ 투명한 출처 표기법",
+                badge: "원칙 02 - 투명한 공개",
+                color: "blue",
+                content: `
+                    <div class="space-y-4">
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            AI 사용을 숨기는 것은 학문적/직무적 정직성에 어긋납니다. 올바른 투명성 준수 가이드라인입니다.
+                        </p>
+                        
+                        <div class="p-4 rounded-xl bg-blue-950/30 border border-blue-500/30 space-y-2">
+                            <h5 class="text-sm font-bold text-blue-300">표준 표기 필수 4대 요소</h5>
+                            <ul class="text-xs text-slate-300 space-y-1.5 list-disc list-inside">
+                                <li><strong>사용 모델:</strong> ChatGPT (GPT-4o), Claude 3.5 Sonnet 등 정확한 서비스명</li>
+                                <li><strong>제공 회사:</strong> OpenAI, Anthropic, Google 등 개발사</li>
+                                <li><strong>활용 프롬프트:</strong> 아이디어 도출용, 요약용, 문장 교정용 등 구체적 용도</li>
+                                <li><strong>검증 기록:</strong> 교차 검증에 활용한 1차 자료 목록 표기</li>
+                            </ul>
+                        </div>
+                        <p class="text-xs text-slate-400 italic">
+                            * 주의: 주요 학술지 및 교육기관 지침에 따라 AI는 공동 저자(Co-Author)로 등록될 수 없으며, 사용자의 책임 하에 인용되어야 합니다.
+                        </p>
+                    </div>
+                `
+            },
+            security: {
+                title: "🛡️ 철통 방어 5대 보안 수칙",
+                badge: "원칙 03 - 철통 보안",
+                color: "amber",
+                content: `
+                    <div class="space-y-3">
+                        <div class="p-3 bg-slate-800 rounded-lg border border-slate-700 text-xs text-slate-300">
+                            <strong class="text-amber-400">1. 민감 정보 입력 금지:</strong> 주민등록번호, 비밀번호, 계좌번호, 기업 미공개 내부 문서 입력 금지.
+                        </div>
+                        <div class="p-3 bg-slate-800 rounded-lg border border-slate-700 text-xs text-slate-300">
+                            <strong class="text-amber-400">2. 가명화 및 익명화:</strong> 사례 분석 시 실제 사람 이름 대신 'A씨', 회사명 대신 'X사'로 치환 후 질문.
+                        </div>
+                        <div class="p-3 bg-slate-800 rounded-lg border border-slate-700 text-xs text-slate-300">
+                            <strong class="text-amber-400">3. 대화 이력 및 학습 비활성화:</strong> Settings에서 Model Training / Chat History 옵션 해제.
+                        </div>
+                        <div class="p-3 bg-slate-800 rounded-lg border border-slate-700 text-xs text-slate-300">
+                            <strong class="text-amber-400">4. 보안 질문/인증번호 차단:</strong> AI에게 2차 인증 번호나 비밀번호 힌트를 묻거나 입력하지 말 것.
+                        </div>
+                        <div class="p-3 bg-slate-800 rounded-lg border border-slate-700 text-xs text-slate-300">
+                            <strong class="text-amber-400">5. 다중 인증(MFA) 필수:</strong> AI 서비스 계정에 Authenticator 앱 등 MFA 설정.
+                        </div>
+                    </div>
+                `
+            },
+            ethics: {
+                title: "⚖️ 윤리적 편향 감시",
+                badge: "원칙 04 - 편향 경계",
+                color: "rose",
+                content: `
+                    <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                        AI 모델은 과거 웹 데이터상의 인종, 성별, 국가, 직업적 고정관념을 그대로 학습합니다.
+                    </p>
+                    <div class="bg-rose-950/20 border border-rose-500/30 p-4 rounded-xl text-xs text-rose-200 space-y-2">
+                        <div class="font-bold">탐정의 체크포인트:</div>
+                        <p>· 특정 직업군을 특정 성별로만 표현하고 있지 않은가?</p>
+                        <p>· 문화적/지역적 편견이 내포되어 다수의 의견만을 정답으로 제시하지 않는가?</p>
+                        <p>· 소수자의 의견이나 다각도의 관점을 배제하지 않았는가?</p>
+                    </div>
+                `
+            },
+            agency: {
+                title: "🎓 주체적 학습 (Rewriting)",
+                badge: "원칙 05 - 주체적 학습",
+                color: "purple",
+                content: `
+                    <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                        AI가 써준 글을 그대로 복사하면 비판적 사고 능력이 퇴화하고 표절 논란이 발생합니다.
+                    </p>
+                    <div class="bg-purple-950/30 border border-purple-500/30 p-4 rounded-xl text-xs text-purple-200 space-y-2">
+                        <div class="font-bold">주체적 Rewriting 3단계:</div>
+                        <p>1. <strong>해체하기:</strong> AI 초안의 개요와 아이디어 포인트만 메모에 따로 발췌한다.</p>
+                        <p>2. <strong>검증하기:</strong> 발췌한 내용의 사실관계를 1차 사료로 확인한다.</p>
+                        <p>3. <strong>다시 쓰기:</strong> AI 창을 닫고, 나의 논리와 나의 문체로 완전히 새로 작성한다.</p>
+                    </div>
+                `
+            }
+        };
+
+        // Checklist Data
+        const checklistData = [
+            { id: 'c1', text: 'AI 질문 시 이름, 연락처, 개인 식별 정보를 가명(예: 홍길동 ➔ A씨) 처리하였는가?' },
+            { id: 'c2', text: 'AI 설정(Settings)에서 내 대화가 AI 학습에 쓰이지 않도록 옵션을 껐는가?' },
+            { id: 'c3', text: 'AI가 제공한 수치나 논문 출처를 DBpia, RISS 등 1차 학술 DB에서 직접 검증하였는가?' },
+            { id: 'c4', text: '작성한 보고서에 활용한 AI 모델명과 인용 사실을 명확히 기록하였는가?' },
+            { id: 'c5', text: 'AI의 답변을 그대로 복사하지 않고 나만의 언어로 다시 쓰는(Rewriting) 과정을 거쳤는가?' },
+            { id: 'c6', text: 'AI 서비스 계정에 다중 인증(MFA / 2차 인증)을 설정해두었는가?' }
+        ];
+
+        // Quiz Data
+        const quizData = [
+            {
+                question: "사건 #1: 과제 보고서를 쓰던 중 AI가 '2023년 한국은행 발표에 따르면...' 이라며 매우 구체적인 수치를 제시했습니다. 탐정인 당신의 올바른 행동은?",
+                options: [
+                    "AI가 수치까지 구체적으로 적어주었으니 그대로 보고서에 인용한다.",
+                    "한국은행 공식 홈페이지나 E-나라지표 포털에 접속하여 해당 연도의 실제 발표 수치를 확인한다.",
+                    "AI에게 '이거 진짜야?' 라고 다시 물어보고 '네 진짜입니다'라고 하면 믿는다."
+                ],
+                correct: 1,
+                explanation: "정답! AI는 환각(Hallucination) 현상으로 인해 없는 보고서나 수치를 진짜처럼 꾸며낼 수 있습니다. 반드시 공인된 1차 자료 사이트에서 직접 확인해야 합니다."
+            },
+            {
+                question: "사건 #2: 회사 내부 보고서의 문장을 매끄럽게 교정하고 싶습니다. 어떻게 질문해야 할까요?",
+                options: [
+                    "대외비 문서 전체와 고객들의 개인 정보를 그대로 입력창에 넣고 교정을 부탁한다.",
+                    "고객명, 매출액 등 민감한 수치를 XXX로 가명화한 후 문장 구조만 교정해달라고 입력한다.",
+                    "AI는 안전하므로 아무런 비밀번호나 고객 정보도 걱정 없이 입력한다."
+                ],
+                correct: 1,
+                explanation: "정답! 민감한 정보는 서버 학습에 활용될 위험이 있으므로, 가명화(Anonymization) 처리를 한 후 입력해야 보안 사고를 예방할 수 있습니다."
+            },
+            {
+                question: "사건 #3: AI가 작성해 준 에세이 초안이 마음에 듭니다. 최종 제출 시 바람직한 태도는?",
+                options: [
+                    "초안의 아이디어와 개요만 힌트로 활용하고, 내 생각과 문체로 직접 다시 쓴다 (Rewriting).",
+                    "글씨체만 바꾸고 그대로 제출한다.",
+                    "GPT detector 탐지 도구를 돌려서 안 걸릴 때까지 단어 몇 개만 교체한다."
+                ],
+                correct: 0,
+                explanation: "정답! AI 답변의 단순 복사는 학습 성장을 방해합니다. AI를 아이디어 힌트로 삼고 나의 언어로 재작성하는 주체적 학습 태도가 핵심입니다."
+            },
+            {
+                question: "사건 #4: AI가 특정 직업군이나 문화권에 대해 편향된 시각이 담긴 답변을 냈을 때 올바른 탐정의 판단은?",
+                options: [
+                    "AI는 인공지능이므로 무조건 중립적이라고 신뢰한다.",
+                    "과거 데이터 학습으로 인한 편향 가능성을 인식하고, 다각도의 관점과 소수 의견을 직접 추가 보완한다.",
+                    "편향된 내용을 그대로 소셜 미디어에 공유한다."
+                ],
+                correct: 1,
+                explanation: "정답! AI는 과거 데이터의 고정관념을 재생산할 수 있습니다. 윤리적 편향을 비판적으로 감시하는 안목이 필요합니다."
+            }
+        ];
+
+        let currentQuizIndex = 0;
+        let userQuizAnswers = [];
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-emerald-500', 'text-slate-950', 'shadow-md');
+                btn.classList.add('text-slate-400');
+            });
+
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+
+            const targetBtn = document.getElementById(`tab-btn-${tabId}`);
+            const targetContent = document.getElementById(`tab-content-${tabId}`);
+
+            if (targetBtn && targetContent) {
+                targetBtn.classList.add('bg-emerald-500', 'text-slate-950', 'shadow-md');
+                targetBtn.classList.remove('text-slate-400');
+                targetContent.classList.remove('hidden');
+            }
+        }
+
+        // Modal Logic
+        function openModal(key) {
+            const data = modalData[key];
+            if (!data) return;
+
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <div>
+                    <span class="text-xs font-bold px-3 py-1 rounded-full bg-${data.color}-500/20 text-${data.color}-400 border border-${data.color}-500/30">
+                        ${data.badge}
+                    </span>
+                    <h3 class="text-2xl font-bold text-white mt-3">${data.title}</h3>
+                </div>
+                <div>${data.content}</div>
+                <div class="pt-4 border-t border-slate-800 flex justify-end">
+                    <button onclick="closeModal()" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-semibold">닫기</button>
+                </div>
+            `;
+
+            document.getElementById('modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+        }
+
+        function openResourceModal(type) {
+            const modalBody = document.getElementById('modal-body');
+            
+            if (type === 'presentation') {
+                modalBody.innerHTML = `
+                    <div>
+                        <span class="text-xs font-bold px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                            자료실 · 교육 발표자료
+                        </span>
+                        <h3 class="text-2xl font-bold text-white mt-3 flex items-center gap-2">
+                            <i class="fa-solid fa-file-pdf text-amber-400"></i>
+                            03_AI 스토리 영상 제작.pdf
+                        </h3>
+                    </div>
+                    <div class="space-y-4">
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            AI 스토리 영상 제작 관련 발표자료 PDF 파일입니다.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-800 flex justify-between items-center">
+                        <span class="text-xs text-slate-400"><i class="fa-solid fa-paperclip mr-1"></i> 파일명: 03_AI 스토리 영상 제작.pdf</span>
+                        <a href="03_AI 스토리 영상 제작.pdf" download="03_AI 스토리 영상 제작.pdf" onclick="showToast('03_AI 스토리 영상 제작.pdf 다운로드를 시작합니다.')" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-xs transition flex items-center gap-2">
+                            <i class="fa-solid fa-download"></i>
+                            <span>PDF 다운로드</span>
+                        </a>
+                    </div>
+                `;
+            } else if (type === 'infographic') {
+                modalBody.innerHTML = `
+                    <div>
+                        <span class="text-xs font-bold px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
+                            시각 자료 · 인포그래픽
+                        </span>
+                        <h3 class="text-2xl font-bold text-white mt-3 flex items-center gap-2">
+                            <i class="fa-solid fa-image text-cyan-400"></i>
+                            생성형 AI 책임 활용 가이드라인
+                        </h3>
+                    </div>
+                    <div class="overflow-y-auto max-h-[65vh] bg-slate-950 p-2 rounded-2xl border border-slate-800 flex items-center justify-center">
+                        <img src="생성형_AI_책임_활용_가이드라인.png" alt="생성형 AI 책임 활용 가이드라인" class="max-w-full h-auto rounded-xl shadow-lg" onerror="this.onerror=null; this.src='https://placehold.co/800x1200/0f172a/38bdf8?text=%EC%83%8D%EC%84%B1%ED%98%95_AI_%EC%B1%84%EA%B8%88_%ED%99%9C%EC%9A%A9_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%9D%BC%EC%9D%B8.png';">
+                    </div>
+                    <div class="pt-3 border-t border-slate-800 flex justify-between items-center">
+                        <a href="생성형_AI_책임_활용_가이드라인.png" download="생성형_AI_책임_활용_가이드라인.png" class="text-xs text-cyan-400 hover:underline flex items-center gap-1">
+                            <i class="fa-solid fa-download"></i> 원본 이미지 다운로드
+                        </a>
+                        <button onclick="closeModal()" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-semibold">닫기</button>
+                    </div>
+                `;
+            } else if (type === 'video') {
+                modalBody.innerHTML = `
+                    <div>
+                        <span class="text-xs font-bold px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                            시청 자료 · 영상
+                        </span>
+                        <h3 class="text-2xl font-bold text-white mt-3 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-play text-rose-400"></i>
+                            AI 객관성의 환상: 편향성, 환각, 안전한 사용법
+                        </h3>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="relative bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
+                            <video controls autoplay class="w-full max-h-[60vh] rounded-2xl">
+                                <source src="AI_객관성의_환상__편향성,_환각,_안전한_사용법.mp4" type="video/mp4">
+                                브라우저가 비디오 태그를 지원하지 않습니다.
+                            </video>
+                        </div>
+                        <div class="flex items-center justify-between text-xs text-slate-400 px-1">
+                            <span><i class="fa-solid fa-film mr-1"></i> AI_객관성의_환상__편향성,_환각,_안전한_사용법.mp4</span>
+                            <a href="AI_객관성의_환상__편향성,_환각,_안전한_사용법.mp4" download class="text-rose-400 hover:underline flex items-center gap-1">
+                                <i class="fa-solid fa-download"></i> 영상 다운로드
+                            </a>
+                        </div>
+                    </div>
+                    <div class="pt-3 border-t border-slate-800 flex justify-end">
+                        <button onclick="closeModal()" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-semibold">닫기</button>
+                    </div>
+                `;
+            }
+
+            document.getElementById('modal').classList.remove('hidden');
+        }
+
+        function downloadFile(filename = "03_AI 스토리 영상 제작.pdf") {
+            const a = document.createElement('a');
+            a.href = filename;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast(`${filename} 파일 다운로드를 시작합니다.`);
+        }
+
+        function playVideoSimulation() {
+            const status = document.getElementById('video-status');
+            const title = document.getElementById('video-title');
+            if (status && title) {
+                title.innerText = "▶ 영상 시청 중: AI 탐정단의 5대 수칙 안내";
+                status.innerText = "비판적 사고와 데이터 보안 수칙을 시청 중입니다...";
+                showToast("가이드 영상 시청을 시작합니다.");
+            }
+        }
+
+        // Render Checklist
+        function initChecklist() {
+            const container = document.getElementById('checklist-items');
+            container.innerHTML = checklistData.map(item => `
+                <label class="flex items-start space-x-3 p-4 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                    <input type="checkbox" onchange="updateChecklistProgress()" value="${item.id}" class="mt-1 w-5 h-5 rounded border-slate-700 text-emerald-500 focus:ring-emerald-500 bg-slate-800">
+                    <span class="text-sm text-slate-300 leading-relaxed">${item.text}</span>
+                </label>
+            `).join('');
+        }
+
+        function updateChecklistProgress() {
+            const checkedCount = document.querySelectorAll('#checklist-items input[type="checkbox"]:checked').length;
+            const total = checklistData.length;
+            const percent = Math.round((checkedCount / total) * 100);
+
+            document.getElementById('checklist-score').innerText = `${percent}%`;
+            updateDetectiveRank(percent);
+        }
+
+        function updateDetectiveRank(percent) {
+            const rankText = document.getElementById('detective-rank-text');
+            const progressBar = document.getElementById('progress-bar');
+            
+            progressBar.style.width = `${Math.max(20, percent)}%`;
+
+            if (percent >= 100) {
+                rankText.innerText = '명탐정 (Master)';
+                rankText.className = 'text-sm font-bold text-amber-400 flex items-center justify-end gap-1';
+            } else if (percent >= 50) {
+                rankText.innerText = '정식 탐정';
+                rankText.className = 'text-sm font-bold text-emerald-400 flex items-center justify-end gap-1';
+            } else {
+                rankText.innerText = '견습 탐정';
+                rankText.className = 'text-sm font-bold text-slate-400 flex items-center justify-end gap-1';
+            }
+        }
+
+        // Render Quiz
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            const q = quizData[currentQuizIndex];
+
+            document.getElementById('quiz-progress').innerText = `문제 ${currentQuizIndex + 1} / ${quizData.length}`;
+
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <h4 class="text-lg font-bold text-white leading-relaxed">${q.question}</h4>
+                    <div class="space-y-3">
+                        ${q.options.map((opt, idx) => `
+                            <button onclick="submitQuizAnswer(${idx})" class="w-full text-left p-4 rounded-xl bg-slate-900 border border-slate-700 hover:border-emerald-500 text-slate-300 hover:text-white transition text-sm flex items-start gap-3">
+                                <span class="w-6 h-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs shrink-0 font-bold">${idx + 1}</span>
+                                <span>${opt}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function submitQuizAnswer(selectedIdx) {
+            const q = quizData[currentQuizIndex];
+            const isCorrect = selectedIdx === q.correct;
+            const container = document.getElementById('quiz-container');
+
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="p-4 rounded-2xl ${isCorrect ? 'bg-emerald-950/40 border border-emerald-500/40 text-emerald-300' : 'bg-rose-950/40 border border-rose-500/40 text-rose-300'}">
+                        <div class="flex items-center gap-2 font-bold text-lg mb-2">
+                            <i class="fa-solid ${isCorrect ? 'fa-circle-check text-emerald-400' : 'fa-circle-xmark text-rose-400'}"></i>
+                            <span>${isCorrect ? '정답입니다!' : '아쉽습니다. 다시 점검해보세요!'}</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">${q.explanation}</p>
+                    </div>
+
+                    <div class="flex justify-end">
+                        ${currentQuizIndex < quizData.length - 1 ? `
+                            <button onclick="nextQuiz()" class="px-6 py-2.5 bg-emerald-500 text-slate-950 font-bold rounded-xl text-sm hover:bg-emerald-400 transition">
+                                다음 문제로 이동 <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        ` : `
+                            <button onclick="resetQuiz()" class="px-6 py-2.5 bg-slate-700 text-white font-bold rounded-xl text-sm hover:bg-slate-600 transition">
+                                처음부터 다시 풀기
+                            </button>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+
+        function nextQuiz() {
+            currentQuizIndex++;
+            renderQuiz();
+        }
+
+        function resetQuiz() {
+            currentQuizIndex = 0;
+            renderQuiz();
+        }
+
+        // Copy Helper
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = message;
+            toast.classList.remove('opacity-0');
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+            }, 2500);
+        }
+
+        function copyPrompt() {
+            const topic = document.getElementById('prompt-topic').value || "생성형 AI의 사회적 영향";
+            const level = document.getElementById('prompt-level').value;
+            let text = "";
+
+            if (level === 'strict') {
+                text = `[AI 탐정 팩트체크 프롬프트]\n주제: "${topic}"\n위 주제에 대해 답변하되, 다음 지침을 반드시 준수하세요:\n1. 모든 수치와 주장은 (공식 기관명, 보고서 제목, 출판연도)를 밝힐 것.\n2. 확인되지 않은 사실이나 추측은 작성하지 말고 '확인 불가'로 명시할 것.\n3. 주요 인용문헌의 1차 출처 DB 검색 키워드를 제시할 것.`;
+            } else {
+                text = `주제 "${topic}"에 대해 요약해줘. 단, 주요 사실의 출처 기관명과 발표 연도를 문장 끝에 함께 표기해줘.`;
+            }
+
+            copyToClipboard(text);
+        }
+
+        function copyCitation() {
+            const model = document.getElementById('cite-model').value;
+            const company = document.getElementById('cite-company').value;
+            const date = document.getElementById('cite-date').value;
+
+            const text = `${company}. (${date}). ${model} [대규모 언어 모델]. 이용자가 출처 데이터를 1차 학술 자료와 직접 교차 검증을 완료함.`;
+            copyToClipboard(text);
+        }
+
+        function copyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast("클립보드에 복사되었습니다!");
+        }
+
+        // Initialize Page
+        window.onload = function() {
+            initChecklist();
+            renderQuiz();
+        };
+    </script>
+</body>
+</html>
