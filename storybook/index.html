@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>멋진 지훈이의 인생 - 스토리 & 영상</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            800: '#1e3a8a',
+                            900: '#0f172a'
+                        },
+                        amber: {
+                            500: '#f59e0b',
+                            600: '#d97706'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Pretendard', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom scrollbar and subtle glassmorphism effects */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glow-effect {
+            box-shadow: 0 0 25px -5px rgba(37, 99, 235, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-50 glass-card border-b border-slate-800/80 bg-slate-950/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Left: Home Button -->
+            <a href="../index.html" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 hover:text-white transition-all text-sm font-medium border border-slate-700/50 hover:border-slate-600 shadow-sm active:scale-95 group">
+                <svg class="w-4 h-4 text-brand-500 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+                <span>홈으로 이동</span>
+            </a>
+
+            <!-- Center: Title -->
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-cyan-500 flex items-center justify-center font-bold text-white shadow-md">
+                    지
+                </div>
+                <h1 class="text-base sm:text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                    <span>멋진 지훈이의 인생</span>
+                    <span class="text-xs font-normal text-brand-500 px-2 py-0.5 rounded-full bg-brand-500/10 border border-brand-500/20 hidden sm:inline-block">스토리 시네마</span>
+                </h1>
+            </div>
+
+            <!-- Right: Action Badge -->
+            <div class="hidden sm:flex items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 text-xs text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    5개 장면 나레이션 수록
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <!-- Hero Section: Title & Intro -->
+        <section class="text-center space-y-4 max-w-3xl mx-auto pt-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 text-brand-400 border border-brand-500/20 text-xs font-semibold tracking-wide uppercase">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                </svg>
+                원작: 문지훈 | 토목공학도를 향한 청춘 가이드
+            </div>
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                단단한 꿈을 설계하는 <br class="sm:hidden">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-300">지훈이의 성장 스토리</span>
+            </h2>
+            <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
+                시련은 그를 무너뜨리는 것이 아니라, 더 단단한 공학자가 되기 위한 기초 공사였습니다. 
+                5개의 핵심 장면과 완성된 영상(mv.mp4)을 함께 감상해보세요.
+            </p>
+        </section>
+
+        <!-- Video Player Section -->
+        <section class="glass-card rounded-2xl p-4 sm:p-6 shadow-2xl glow-effect border border-slate-800">
+            <div class="flex flex-col lg:flex-row gap-6">
+                
+                <!-- Main Video Display -->
+                <div class="lg:w-2/3 space-y-3">
+                    <div class="relative aspect-video rounded-xl overflow-hidden bg-slate-900 border border-slate-800 shadow-inner group">
+                        <!-- Video Element -->
+                        <video id="mainVideo" controls class="w-full h-full object-cover rounded-xl" poster="https://placehold.co/1280x720/0f172a/38bdf8?text=%EB%A9%8B%EC%A7%84+%EC%A7%80%ED%9B%88%EC%9D%B4%EC%9D%98+%EC%9D%B8%EC%83%9D+MV">
+                            <source src="mv.mp4" type="video/mp4">
+                            브라우저가 비디오 태그를 지원하지 않습니다.
+                        </video>
+                    </div>
+
+                    <!-- Video Controls Quick Jump Bar -->
+                    <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-xs">
+                        <span class="text-slate-400 font-medium flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            장면 바로가기:
+                        </span>
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            <button onclick="jumpToTime(0)" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-brand-600 hover:text-white text-slate-300 transition-colors">장면 1 (00:00)</button>
+                            <button onclick="jumpToTime(12)" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-brand-600 hover:text-white text-slate-300 transition-colors">장면 2 (00:12)</button>
+                            <button onclick="jumpToTime(24)" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-brand-600 hover:text-white text-slate-300 transition-colors">장면 3 (00:24)</button>
+                            <button onclick="jumpToTime(36)" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-brand-600 hover:text-white text-slate-300 transition-colors">장면 4 (00:36)</button>
+                            <button onclick="jumpToTime(48)" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-brand-600 hover:text-white text-slate-300 transition-colors">장면 5 (00:48)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Summary Box -->
+                <div class="lg:w-1/3 flex flex-col justify-between space-y-4 bg-slate-900/60 p-5 rounded-xl border border-slate-800/80">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                            <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                                <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                </svg>
+                                작품 개요
+                            </h3>
+                            <span class="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-400">성장 드라마</span>
+                        </div>
+
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            <strong class="text-brand-400">《멋진 지훈이의 인생》</strong>은 남들과 다르게 도시의 거대한 기둥과 땅속 기초를 궁금해하던 열일곱 살 지훈이가, 복잡한 역학과 공식의 벽에 부딪혔다가 친구 세윤이와 대학생 선배 민호의 도움으로 다시 꿈을 완성해 나가는 감동 스토리를 담고 있습니다.
+                        </p>
+
+                        <!-- Key Messages -->
+                        <div class="space-y-2">
+                            <div class="p-3 rounded-lg bg-slate-950/70 border border-slate-800 text-xs space-y-1">
+                                <div class="text-amber-400 font-semibold flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                                    </svg>
+                                    핵심 대사
+                                </div>
+                                <p class="text-slate-300 italic">"기초 공사가 원래 제일 힘들고 지루한 법이야."</p>
+                            </div>
+
+                            <div class="p-3 rounded-lg bg-slate-950/70 border border-slate-800 text-xs space-y-1">
+                                <div class="text-cyan-400 font-semibold flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                    </svg>
+                                    깨달음
+                                </div>
+                                <p class="text-slate-300">수학은 단순히 딱딱한 공식이 아니라, 다리를 받쳐주는 힘의 흐름을 읽는 언어이다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Copy Script Quick Button -->
+                    <button onclick="copyAllNarration()" id="copyBtn" class="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-2 border border-slate-700/60 transition-all active:scale-98">
+                        <svg class="w-4 h-4 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+                        </svg>
+                        <span>전체 나레이션 대본 복사하기</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5 Scenes Narration Cards Grid -->
+        <section class="space-y-6">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                <div>
+                    <h3 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-brand-500"></span>
+                        영상 구성: 5개 주요 장면 대본
+                    </h3>
+                    <p class="text-sm text-slate-400 mt-1">각 장면별 연출 콘셉트와 나레이션 상세 내용입니다.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="expandAllScenes()" class="px-3 py-1.5 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition">전체 펴기</button>
+                    <button onclick="collapseAllScenes()" class="px-3 py-1.5 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition">전체 접기</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6">
+
+                <!-- Scene 1 Card -->
+                <div id="scene-card-1" class="glass-card rounded-2xl p-6 transition-all border border-slate-800 hover:border-brand-500/50 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <span class="w-9 h-9 rounded-xl bg-brand-500/20 text-brand-400 font-bold flex items-center justify-center text-base border border-brand-500/30">01</span>
+                            <div>
+                                <h4 class="text-lg font-bold text-white">장면 1: 꿈의 시작 (세상을 받치는 뼈대)</h4>
+                                <span class="text-xs text-slate-400">연출: 화려한 빌딩 너머로 거대한 기둥과 땅속 기초 그래픽 구현</span>
+                            </div>
+                        </div>
+                        <button onclick="jumpToTime(0)" class="px-3 py-1.5 rounded-lg bg-brand-600/20 hover:bg-brand-600 text-brand-300 hover:text-white text-xs font-medium border border-brand-500/30 transition flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.333-5.89a1.5 1.5 0 000-2.538L6.3 2.841z"/></svg>
+                            장면 재생 (00:00)
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-900/90 rounded-xl p-4 border border-slate-800 space-y-2">
+                        <div class="flex items-center gap-2 text-xs font-semibold text-brand-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
+                            나레이션
+                        </div>
+                        <p class="text-slate-200 text-sm leading-relaxed pl-1 italic font-medium">
+                            "열일곱 지훈이의 눈에 도시는 거대한 기계 장치와 같습니다. 남들이 화려한 빌딩을 볼 때, 지훈이는 그 아래 숨겨진 단단한 기초를 바라보며 사회의 뼈대를 만드는 토목공학자의 꿈을 키워갑니다."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Scene 2 Card -->
+                <div id="scene-card-2" class="glass-card rounded-2xl p-6 transition-all border border-slate-800 hover:border-brand-500/50 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <span class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center text-base border border-amber-500/30">02</span>
+                            <div>
+                                <h4 class="text-lg font-bold text-white">장면 2: 시련과 벽 (차가운 공식의 압박)</h4>
+                                <span class="text-xs text-slate-400">연출: 산더미 같은 교재, 옥상에서 시험지를 보며 한숨을 내뱉는 지훈</span>
+                            </div>
+                        </div>
+                        <button onclick="jumpToTime(12)" class="px-3 py-1.5 rounded-lg bg-amber-600/20 hover:bg-amber-600 text-amber-300 hover:text-white text-xs font-medium border border-amber-500/30 transition flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.333-5.89a1.5 1.5 0 000-2.538L6.3 2.841z"/></svg>
+                            장면 재생 (00:12)
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-900/90 rounded-xl p-4 border border-slate-800 space-y-2">
+                        <div class="flex items-center gap-2 text-xs font-semibold text-amber-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
+                            나레이션
+                        </div>
+                        <p class="text-slate-200 text-sm leading-relaxed pl-1 italic font-medium">
+                            "하지만 입시라는 현실 앞, 복잡한 물리학과 수학 공식은 거대한 벽이 되어 막아서고 시험 결과에 낙담한 지훈이는 '과연 내가 이 길을 갈 수 있을까' 깊은 무력감에 빠집니다."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Scene 3 Card -->
+                <div id="scene-card-3" class="glass-card rounded-2xl p-6 transition-all border border-slate-800 hover:border-brand-500/50 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <span class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center text-base border border-emerald-500/30">03</span>
+                            <div>
+                                <h4 class="text-lg font-bold text-white">장면 3: 친구의 응원 (마음을 다잡는 기초 공사)</h4>
+                                <span class="text-xs text-slate-400">연출: 세윤이가 문제집에 힘의 화살표를 그리며 지훈이를 따뜻하게 설명</span>
+                            </div>
+                        </div>
+                        <button onclick="jumpToTime(24)" class="px-3 py-1.5 rounded-lg bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white text-xs font-medium border border-emerald-500/30 transition flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.333-5.89a1.5 1.5 0 000-2.538L6.3 2.841z"/></svg>
+                            장면 재생 (00:24)
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-900/90 rounded-xl p-4 border border-slate-800 space-y-2">
+                        <div class="flex items-center gap-2 text-xs font-semibold text-emerald-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
+                            나레이션
+                        </div>
+                        <p class="text-slate-200 text-sm leading-relaxed pl-1 italic font-medium">
+                            "그때 친구 세윤이가 다가와 힘이 되어줍니다. '지금 힘들고 지루한 공부는, 네가 지을 다리를 버티게 해줄 기초 공사야.' 세윤이의 격려 속에 딱딱하던 공식들은 조금씩 의미를 얻기 시작합니다."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Scene 4 Card -->
+                <div id="scene-card-4" class="glass-card rounded-2xl p-6 transition-all border border-slate-800 hover:border-brand-500/50 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <span class="w-9 h-9 rounded-xl bg-cyan-500/20 text-cyan-400 font-bold flex items-center justify-center text-base border border-cyan-500/30">04</span>
+                            <div>
+                                <h4 class="text-lg font-bold text-white">장면 4: 현장에서의 깨달음 (수학이 살아 숨 쉬는 곳)</h4>
+                                <span class="text-xs text-slate-400">연출: 대형 교량 공사 현장, 민호 선배가 나무 막대 교량 모형을 들고 설명</span>
+                            </div>
+                        </div>
+                        <button onclick="jumpToTime(36)" class="px-3 py-1.5 rounded-lg bg-cyan-600/20 hover:bg-cyan-600 text-cyan-300 hover:text-white text-xs font-medium border border-cyan-500/30 transition flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.333-5.89a1.5 1.5 0 000-2.538L6.3 2.841z"/></svg>
+                            장면 재생 (00:36)
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-900/90 rounded-xl p-4 border border-slate-800 space-y-2">
+                        <div class="flex items-center gap-2 text-xs font-semibold text-cyan-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
+                            나레이션
+                        </div>
+                        <p class="text-slate-200 text-sm leading-relaxed pl-1 italic font-medium">
+                            "주말, 건설 현장에서 만난 선배는 작은 교량 모형을 보여주며 말합니다. '네가 배우는 수학은 결국 이 힘의 흐름을 읽는 언어야.' 책 속의 공식들이 현실이 되는 순간을 보며 지훈이의 눈빛이 다시 빛납니다."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Scene 5 Card -->
+                <div id="scene-card-5" class="glass-card rounded-2xl p-6 transition-all border border-slate-800 hover:border-brand-500/50 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <span class="w-9 h-9 rounded-xl bg-purple-500/20 text-purple-400 font-bold flex items-center justify-center text-base border border-purple-500/30">05</span>
+                            <div>
+                                <h4 class="text-lg font-bold text-white">장면 5: 내일을 향해 (더 단단해진 발걸음)</h4>
+                                <span class="text-xs text-slate-400">연출: 자신감 넘치게 공식을 풀어내며 대학 교문으로 당당하게 걸어가는 지훈</span>
+                            </div>
+                        </div>
+                        <button onclick="jumpToTime(48)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 hover:bg-purple-600 text-purple-300 hover:text-white text-xs font-medium border border-purple-500/30 transition flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.333-5.89a1.5 1.5 0 000-2.538L6.3 2.841z"/></svg>
+                            장면 재생 (00:48)
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-900/90 rounded-xl p-4 border border-slate-800 space-y-2">
+                        <div class="flex items-center gap-2 text-xs font-semibold text-purple-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
+                            나레이션
+                        </div>
+                        <p class="text-slate-200 text-sm leading-relaxed pl-1 italic font-medium">
+                            "시련은 나를 무너뜨리는 게 아닌, 더 단단해지기 위한 기초 공사였습니다. 미래에 자신이 만들 다리 위를 걸어갈 사람들의 웃음을 상상하며, 지훈이는 오늘도 꿈을 향해 힘차게 나아갑니다."
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-slate-950 py-8 mt-12 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 space-y-3">
+            <p>《멋진 지훈이의 인생》 - 글/원안: 문지훈</p>
+            <div class="flex justify-center items-center gap-4">
+                <a href="../index.html" class="text-brand-400 hover:underline flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                    메인 홈으로 이동 (../index.html)
+                </a>
+            </div>
+            <p class="text-slate-600">Video player source configured to: <code class="text-slate-400">mv.mp4</code></p>
+        </div>
+    </footer>
+
+    <!-- Toast Message Container -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-slate-800 text-slate-100 border border-slate-700 px-4 py-3 rounded-xl shadow-2xl transition-opacity duration-300 opacity-0 pointer-events-none flex items-center gap-2 text-xs z-50">
+        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+        <span id="toastMsg">메시지</span>
+    </div>
+
+    <!-- Client Script -->
+    <script>
+        const video = document.getElementById('mainVideo');
+
+        // Function to jump video time
+        function jumpToTime(seconds) {
+            if (video) {
+                video.currentTime = seconds;
+                video.play().catch(e => {
+                    console.log("Autoplay interrupted:", e);
+                });
+                
+                // Scroll video smoothly into view on mobile
+                video.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                showToast(`장면 (00:${seconds < 10 ? '0' + seconds : seconds}) 재생을 시작합니다.`);
+            }
+        }
+
+        // Copy narration text script
+        function copyAllNarration() {
+            const narrations = [
+                "[장면 1] 열일곱 지훈이의 눈에 도시는 거대한 기계 장치와 같습니다. 남들이 화려한 빌딩을 볼 때, 지훈이는 그 아래 숨겨진 단단한 기초를 바라보며 사회의 뼈대를 만드는 토목공학자의 꿈을 키워갑니다.",
+                "[장면 2] 하지만 입시라는 현실 앞, 복잡한 물리학과 수학 공식은 거대한 벽이 되어 막아서고 시험 결과에 낙담한 지훈이는 '과연 내가 이 길을 갈 수 있을까' 깊은 무력감에 빠집니다.",
+                "[장면 3] 그때 친구 세윤이가 다가와 힘이 되어줍니다. '지금 힘들고 지루한 공부는, 네가 지을 다리를 버티게 해줄 기초 공사야.' 세윤이의 격려 속에 딱딱하던 공식들은 조금씩 의미를 얻기 시작합니다.",
+                "[장면 4] 주말, 건설 현장에서 만난 선배는 작은 교량 모형을 보여주며 말합니다. '네가 배우는 수학은 결국 이 힘의 흐름을 읽는 언어야.' 책 속의 공식들이 현실이 되는 순간을 보며 지훈이의 눈빛이 다시 빛납니다.",
+                "[장면 5] 시련은 나를 무너뜨리는 게 아닌, 더 단단해지기 위한 기초 공사였습니다. 미래에 자신이 만들 다리 위를 걸어갈 사람들의 웃음을 상상하며, 지훈이는 오늘도 꿈을 향해 힘차게 나아갑니다."
+            ].join("\n\n");
+
+            // Execute copy command
+            const tempInput = document.createElement("textarea");
+            tempInput.value = narrations;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast("5개 장면의 나레이션 대본이 클립보드에 복사되었습니다!");
+            } catch (err) {
+                showToast("복사 중 오류가 발생했습니다.");
+            } finally {
+                document.body.removeChild(tempInput);
+            }
+        }
+
+        // Toast Helper
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            toastMsg.innerText = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        function expandAllScenes() {
+            showToast("모든 장면 카드가 활성화되었습니다.");
+        }
+
+        function collapseAllScenes() {
+            showToast("화면이 정리되었습니다.");
+        }
+    </script>
+</body>
+</html>
