@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRD - 전국 어린이 보호구역 지도 애플리케이션</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --bg-card-hover: rgba(51, 65, 85, 0.8);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-accent: rgba(59, 130, 246, 0.3);
+            
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.4);
+            --accent-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --cctv-yes: #2563eb;
+            --cctv-no: #ef4444;
+            
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-sub: #cbd5e1;
+            
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 85% 65%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        /* Top Progress Bar */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #06b6d4, #8b5cf6);
+            width: 0%;
+            z-index: 1000;
+            transition: width 0.1s ease-out;
+        }
+
+        /* Layout Structure */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            border-right: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 1.25rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: #fff;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        .brand-text h1 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-text p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item a i {
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-item a:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-item.active a {
+            color: #fff;
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.05));
+            border-left: 3px solid var(--primary);
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .doc-meta-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 2.5rem 3rem;
+            max-width: 1200px;
+        }
+
+        /* Hero Banner */
+        .hero-banner {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 100%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-title-group h2 {
+            font-size: 2.1rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #ffffff, #93c5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero-subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .hero-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1.8rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .meta-card {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .meta-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .meta-info label {
+            display: block;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .meta-info span {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* Section Components */
+        .section-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+            backdrop-filter: blur(12px);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-number {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--primary);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* Feature Cards Grid (Section 2) */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-2px);
+            border-color: var(--border-accent);
+        }
+
+        .feature-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .feature-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .feature-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-desc {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            margin-bottom: 1rem;
+        }
+
+        .feature-details {
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 8px;
+            padding: 0.85rem 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .feature-details ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .feature-details li {
+            position: relative;
+            padding-left: 1.2rem;
+        }
+
+        .feature-details li::before {
+            content: '•';
+            color: var(--primary);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Marker Color Badges */
+        .color-badge-group {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 0.8rem;
+        }
+
+        .color-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .color-tag.blue {
+            background: rgba(37, 99, 235, 0.2);
+            color: #60a5fa;
+            border: 1px solid rgba(37, 99, 235, 0.4);
+        }
+
+        .color-tag.red {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+
+        .color-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .color-dot.blue { background: var(--cctv-yes); box-shadow: 0 0 8px var(--cctv-yes); }
+        .color-dot.red { background: var(--cctv-no); box-shadow: 0 0 8px var(--cctv-no); }
+
+        /* Data Spec Table */
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.88rem;
+        }
+
+        .data-table th {
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--text-muted);
+            font-weight: 600;
+            padding: 0.9rem 1.2rem;
+            border-bottom: 1px solid var(--border-color);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .data-table td {
+            padding: 0.9rem 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--text-sub);
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+            color: #fff;
+        }
+
+        .code-tag {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(255, 255, 255, 0.07);
+            color: #38bdf8;
+            padding: 0.2rem 0.45rem;
+            border-radius: 4px;
+            font-size: 0.82rem;
+        }
+
+        .required-badge {
+            display: inline-block;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+        .required-badge.yes {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+        .required-badge.no {
+            background: rgba(148, 163, 184, 0.2);
+            color: #94a3b8;
+        }
+
+        /* Tech Stack Grid */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .tech-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .tech-card:hover {
+            border-color: var(--border-accent);
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        .tech-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .tech-info h4 {
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .tech-info p {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        /* UI Preview Component Mockup */
+        .layout-wireframe {
+            background: #090d16;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .wireframe-header {
+            background: #0f172a;
+            padding: 0.6rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #10b981; }
+
+        .wireframe-body {
+            display: flex;
+            height: 240px;
+        }
+
+        .wireframe-sidebar {
+            width: 30%;
+            background: rgba(30, 41, 59, 0.5);
+            border-right: 1px solid var(--border-color);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .wireframe-map {
+            flex: 1;
+            background: #0f172a;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
+            background-size: 16px 16px;
+        }
+
+        .map-mock-marker {
+            position: absolute;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        .skeleton-line {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 4px;
+        }
+
+        /* Test Plan Checklist */
+        .verification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .verify-item {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .verify-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .verify-status-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .verify-title {
+            font-weight: 600;
+            color: #fff;
+            font-size: 0.92rem;
+        }
+
+        .verify-desc {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .verify-pass-badge {
+            background: rgba(34, 197, 94, 0.1);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 0.3rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* Action bar */
+        .top-action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .top-action-bar-right {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-home {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            color: #93c5fd;
+            padding: 0.5rem 1.1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .btn-home:hover {
+            color: #fff;
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 12px var(--primary-glow);
+        }
+
+        .btn-action {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid var(--border-color);
+            color: var(--text-sub);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-action:hover {
+            color: #fff;
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.15);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Scroll Progress Indicator -->
+    <div id="scroll-progress"></div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>어린이 보호구역</h1>
+                    <p>PRD Document Specification</p>
+                </div>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item active"><a href="#overview"><i class="fa-solid fa-compass"></i> 프로젝트 개요</a></li>
+                <li class="nav-item"><a href="#requirements"><i class="fa-solid fa-list-check"></i> 핵심 기능 요구사항</a></li>
+                <li class="nav-item"><a href="#dataspec"><i class="fa-solid fa-database"></i> 데이터 명세 & 파싱</a></li>
+                <li class="nav-item"><a href="#techstack"><i class="fa-solid fa-layer-group"></i> 기술 스택</a></li>
+                <li class="nav-item"><a href="#design"><i class="fa-solid fa-palette"></i> UI/UX 디자인 가이드</a></li>
+                <li class="nav-item"><a href="#verification"><i class="fa-solid fa-vial-circle-check"></i> 검증 & 테스트 계획</a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div style="margin-bottom: 0.5rem;">
+                    <span class="doc-meta-badge"><i class="fa-solid fa-circle-check"></i> Specifications Approved</span>
+                </div>
+                <p>Version 1.0.0</p>
+                <p>Updated: 2026-08-06</p>
+            </div>
+        </aside>
+
+        <!-- Main Document Area -->
+        <main class="main-content">
+
+            <!-- Top Actions -->
+            <div class="top-action-bar">
+                <a href="../index.html" class="btn-home"><i class="fa-solid fa-house"></i> 홈으로</a>
+                <div class="top-action-bar-right">
+                    <button class="btn-action" onclick="window.print()"><i class="fa-solid fa-print"></i> 인쇄 / PDF 저장</button>
+                    <button class="btn-action" onclick="navigator.clipboard.writeText(window.location.href); alert('링크가 복사되었습니다!');"><i class="fa-solid fa-link"></i> 공유 링크</button>
+                </div>
+            </div>
+
+            <!-- Hero Section -->
+            <header class="hero-banner">
+                <div class="hero-header">
+                    <div class="hero-title-group">
+                        <h2>[PRD] 전국 어린이 보호구역 지도 애플리케이션</h2>
+                        <p class="hero-subtitle">전국어린이보호구역표준데이터 기반 인터랙티브 지도 서비스 요구사항 정의서</p>
+                    </div>
+                </div>
+
+                <div class="hero-meta-grid">
+                    <div class="meta-card">
+                        <div class="meta-icon"><i class="fa-solid fa-file-csv"></i></div>
+                        <div class="meta-info">
+                            <label>Target Dataset</label>
+                            <span>전국어린이보호구역표준데이터.csv</span>
+                        </div>
+                    </div>
+                    <div class="meta-card">
+                        <div class="meta-icon"><i class="fa-solid fa-database"></i></div>
+                        <div class="meta-info">
+                            <label>Total Records</label>
+                            <span>약 14,648 건 (대용량)</span>
+                        </div>
+                    </div>
+                    <div class="meta-card">
+                        <div class="meta-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                        <div class="meta-info">
+                            <label>Map Engine</label>
+                            <span>Leaflet.js + MarkerCluster</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 1. 프로젝트 개요 -->
+            <section id="overview" class="section-card">
+                <div class="section-header">
+                    <div class="section-number">1</div>
+                    <h3 class="section-title">프로젝트 개요 (Overview)</h3>
+                </div>
+                <p style="color: var(--text-sub); font-size: 0.98rem; line-height: 1.8;">
+                    본 프로젝트는 <code class="code-tag">전국어린이보호구역표준데이터.csv</code> 데이터를 기반으로 전국 어린이 보호구역의 위치, 시설 종류, CCTV 설치 여부, 관할 경찰서 등의 정보를 지도 상에서 직관적으로 확인하고 필터링할 수 있는 **대화형 지도 웹 애플리케이션**의 개발 요구사항 정의서입니다.
+                </p>
+            </section>
+
+            <!-- 2. 핵심 기능 요구사항 -->
+            <section id="requirements" class="section-card">
+                <div class="section-header">
+                    <div class="section-number">2</div>
+                    <h3 class="section-title">핵심 기능 요구사항 (Key Requirements)</h3>
+                </div>
+
+                <div class="feature-grid">
+                    <!-- F-1 -->
+                    <div class="feature-item">
+                        <div class="feature-top">
+                            <span class="feature-badge">F-1</span>
+                            <i class="fa-solid fa-location-dot" style="color: var(--primary);"></i>
+                        </div>
+                        <h4 class="feature-name">위치 기반 마커 표시 (Geographic Marker Rendering)</h4>
+                        <p class="feature-desc">CSV 내 위도 및 경도 좌표 데이터를 파싱하여 Leaflet.js 지도 위에 마커를 시각화합니다.</p>
+                        <div class="feature-details">
+                            <ul>
+                                <li>총 14,000여 건 대용량 마커의 원활한 렌더링을 위해 **마커 클러스터링(Marker Clustering)** 기술 필수 적용</li>
+                                <li>좌표 데이터 누락/오류 항목은 사전 예외 처리하여 애플리케이션 무결성 보장</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- F-2 -->
+                    <div class="feature-item">
+                        <div class="feature-top">
+                            <span class="feature-badge">F-2</span>
+                            <i class="fa-solid fa-video" style="color: var(--accent-cyan);"></i>
+                        </div>
+                        <h4 class="feature-name">CCTV 설치여부별 마커 색상 구분 (Color-coded Markers)</h4>
+                        <p class="feature-desc"><code class="code-tag">CCTV설치여부</code> 컬럼 값에 따른 직관적인 마커 색상 차별화</p>
+                        <div class="feature-details">
+                            <p style="margin-bottom: 0.5rem;">마커 색상 매핑 시스텀:</p>
+                            <div class="color-badge-group">
+                                <span class="color-tag blue"><span class="color-dot blue"></span> CCTV 설치 구역 (Y)</span>
+                                <span class="color-tag red"><span class="color-dot red"></span> CCTV 미설치 구역 (N)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- F-3 -->
+                    <div class="feature-item">
+                        <div class="feature-top">
+                            <span class="feature-badge">F-3</span>
+                            <i class="fa-solid fa-filter" style="color: var(--accent-purple);"></i>
+                        </div>
+                        <h4 class="feature-name">사이드바 필터링 및 동기화 (Sidebar Filtering & Live Sync)</h4>
+                        <p class="feature-desc">사용자 정의 필터링 조건에 맞춰 실시간으로 지도 마커 및 통계를 동기화합니다.</p>
+                        <div class="feature-details">
+                            <ul>
+                                <li>**시설종류 필터**: 어린이집, 유치원, 초등학교, 특수학교, 학원 등 (다중 선택/전체 선택)</li>
+                                <li>**CCTV 설치여부 필터**: 전체 / 설치(Y) / 미설치(N) 선택 (라디오/토글 칩)</li>
+                                <li>**실시간 통계 표출**: 검색된 보호구역 총 건수 및 CCTV 설치 비율 (%) 자동 계산</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- F-4 -->
+                    <div class="feature-item">
+                        <div class="feature-top">
+                            <span class="feature-badge">F-4</span>
+                            <i class="fa-solid fa-circle-info" style="color: #f59e0b;"></i>
+                        </div>
+                        <h4 class="feature-name">마커 클릭 시 상세 정보 팝업 (Interactive Info Popup)</h4>
+                        <p class="feature-desc">마커 선택 시 핵심 정보를 담은 대화형 팝업(Popup) 창 출력</p>
+                        <div class="feature-details">
+                            <p style="margin-bottom: 0.4rem; font-weight: 600; color: #fff;">팝업 필수 출력 4대 항목:</p>
+                            <ol style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.2rem;">
+                                <li>**대상시설명** (<code class="code-tag">대상시설명</code>)</li>
+                                <li>**주소** (<code class="code-tag">소재지도로명주소</code> 우선, 부재시 <code class="code-tag">소재지지번주소</code>)</li>
+                                <li>**보호구역 도로폭** (<code class="code-tag">보호구역도로폭</code>)</li>
+                                <li>**관할경찰서명** (<code class="code-tag">관할경찰서명</code>)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. 데이터 명세 및 파싱 -->
+            <section id="dataspec" class="section-card">
+                <div class="section-header">
+                    <div class="section-number">3</div>
+                    <h3 class="section-title">데이터 명세 및 파싱 (Data Specification)</h3>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 10px; border: 1px solid var(--border-color);">
+                        <span style="font-size: 0.78rem; color: var(--text-muted);">파일명</span>
+                        <p style="font-weight: 700; color: #fff; font-family: 'JetBrains Mono', monospace;">전국어린이보호구역표준데이터.csv</p>
+                    </div>
+                    <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 10px; border: 1px solid var(--border-color);">
+                        <span style="font-size: 0.78rem; color: var(--text-muted);">인코딩</span>
+                        <p style="font-weight: 700; color: #f59e0b;">EUC-KR (CP949)</p>
+                    </div>
+                    <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 10px; border: 1px solid var(--border-color);">
+                        <span style="font-size: 0.78rem; color: var(--text-muted);">전체 레코드 수</span>
+                        <p style="font-weight: 700; color: #4ade80;">약 14,648 건</p>
+                    </div>
+                </div>
+
+                <h4 style="font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 1rem;">주요 필드 매핑 테이블</h4>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>CSV 컬럼명</th>
+                                <th>데이터 타입</th>
+                                <th>필수 여부</th>
+                                <th>사용 목적 / UI 연결</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="code-tag">위도</span></td>
+                                <td>Float</td>
+                                <td><span class="required-badge yes">필수</span></td>
+                                <td>지도 마커 Latitude 좌표</td>
+                            </tr>
+                            <tr>
+                                <td><span class="code-tag">경도</span></td>
+                                <td>Float</td>
+                                <td><span class="required-badge yes">필수</span></td>
+                                <td>지도 마커 Longitude 좌표</td>
+                            </tr>
+                            <tr>
+                                <td><span class="code-tag">시설종류</span></td>
+                                <td>String</td>
+                                <td><span class="required-badge yes">필수</span></td>
+                                <td>사이드바 필터 / 팝업 뱃지</td>
+                            </tr>
+                            <tr>
+                                <td><span class="code-tag">CCTV설치여부</span></td>
+                                <td>String (Y/N)</td>
+                                <td><span class="required-badge yes">필수</span></td>
+                                <td>마커 색상 구분(파랑/빨강) / 사이드바 필터</td>
+                            </tr>
+                            <tr>
+                                <td><span class="code-tag">대상시설명</span></td>
+                                <td>String</td>
+                                <td><span class="required-badge yes">필수</span></td>
+                                <td>팝업 타이틀 헤더</td>
+                            </tr>
+                            <tr>
+                                <td><span class="code-tag">소재지도로명주소</span></td>
+                                <td>String</td>
+                                <td><span class="required-badge no">선택</span></td>
+                                <td>팝업 주소 (1순위 표출)</td>
+                            </tr>
+                            <tr>
+                                <td><span class="code-tag">소재지지번주소</span></td>
+                                <td>String</td>
+                                <td><span class="required-badge no">선택</span></td>
+                                <td>팝업 주소 (2순위 대체 표출)</td>
+                            </tr>
+                            <tr>
+                                <td><span class="code-tag">보호구역도로폭</span></td>
+                                <td>String/Number</td>
+                                <td><span class="required-badge no">선택</span></td>
+                                <td>팝업 보호구역 도로폭 정보</td>
+                            </tr>
+                            <tr>
+                                <td><span class="code-tag">관할경찰서명</span></td>
+                                <td>String</td>
+                                <td><span class="required-badge no">선택</span></td>
+                                <td>팝업 관할 경찰서 정보</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 4. 기술 스택 -->
+            <section id="techstack" class="section-card">
+                <div class="section-header">
+                    <div class="section-number">4</div>
+                    <h3 class="section-title">기술 스택 및 라이브러리 (Tech Stack)</h3>
+                </div>
+
+                <div class="tech-grid">
+                    <div class="tech-card">
+                        <div class="tech-icon"><i class="fa-brands fa-js"></i></div>
+                        <div class="tech-info">
+                            <h4>Frontend Core</h4>
+                            <p>HTML5, CSS3, ES6+ Vanilla JavaScript (라이브러리 최소화)</p>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon"><i class="fa-solid fa-map"></i></div>
+                        <div class="tech-info">
+                            <h4>Leaflet.js v1.9.4</h4>
+                            <p>오픈소스 지도 엔진 (OpenStreetMap 타일, API 키 불필요)</p>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon"><i class="fa-solid fa-cubes"></i></div>
+                        <div class="tech-info">
+                            <h4>MarkerCluster</h4>
+                            <p>Leaflet.markercluster 플러그인 (대용량 렌더링 최적화)</p>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon"><i class="fa-solid fa-file-code"></i></div>
+                        <div class="tech-info">
+                            <h4>PapaParse / TextDecoder</h4>
+                            <p>PapaParse v5.4.1 또는 <code class="code-tag">TextDecoder('euc-kr')</code> 한글 파싱</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. UI/UX 디자인 가이드라인 -->
+            <section id="design" class="section-card">
+                <div class="section-header">
+                    <div class="section-number">5</div>
+                    <h3 class="section-title">UI/UX 디자인 가이드라인 (Design System)</h3>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; margin-bottom: 1.5rem;">
+                    <div style="background: rgba(15, 23, 42, 0.6); padding: 1.2rem; border-radius: 10px; border: 1px solid var(--border-color);">
+                        <h4 style="color: var(--primary); font-size: 0.95rem; margin-bottom: 0.4rem;"><i class="fa-solid fa-border-all"></i> 레이아웃 구조</h4>
+                        <p style="font-size: 0.88rem; color: var(--text-sub);">
+                            좌측: 360px 검색 & 필터 사이드바<br>
+                            우측: 뷰포트 100% Full Map
+                        </p>
+                    </div>
+                    <div style="background: rgba(15, 23, 42, 0.6); padding: 1.2rem; border-radius: 10px; border: 1px solid var(--border-color);">
+                        <h4 style="color: var(--accent-cyan); font-size: 0.95rem; margin-bottom: 0.4rem;"><i class="fa-solid fa-wand-magic-sparkles"></i> 비주얼 스타일</h4>
+                        <p style="font-size: 0.88rem; color: var(--text-sub);">
+                            Dark Glassmorphism 투명 배경 테마<br>
+                            CCTV Y(#2563EB) / N(#EF4444) 명도 대비
+                        </p>
+                    </div>
+                    <div style="background: rgba(15, 23, 42, 0.6); padding: 1.2rem; border-radius: 10px; border: 1px solid var(--border-color);">
+                        <h4 style="color: var(--accent-purple); font-size: 0.95rem; margin-bottom: 0.4rem;"><i class="fa-solid fa-hand-pointer"></i> 인터랙션</h4>
+                        <p style="font-size: 0.88rem; color: var(--text-sub);">
+                            마커 호버/클릭 팝업 페이드인 효과<br>
+                            필터 적용 시 마커 재계산 애니메이션
+                        </p>
+                    </div>
+                </div>
+
+                <h4 style="font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem;">레이아웃 와이어프레임 프리뷰</h4>
+                <div class="layout-wireframe">
+                    <div class="wireframe-header">
+                        <span class="dot dot-red"></span>
+                        <span class="dot dot-yellow"></span>
+                        <span class="dot dot-green"></span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted); margin-left: 0.5rem; font-family: 'JetBrains Mono', monospace;">어린이 보호구역 지도 UI preview</span>
+                    </div>
+                    <div class="wireframe-body">
+                        <div class="wireframe-sidebar">
+                            <div class="skeleton-line" style="width: 70%; height: 16px; background: rgba(59, 130, 246, 0.3);"></div>
+                            <div class="skeleton-line" style="width: 100%;"></div>
+                            <div class="skeleton-line" style="width: 85%;"></div>
+                            <div style="margin-top: auto;">
+                                <div class="skeleton-line" style="width: 90%; height: 24px; background: rgba(59, 130, 246, 0.4); border-radius: 6px;"></div>
+                            </div>
+                        </div>
+                        <div class="wireframe-map">
+                            <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">Map Engine Viewport (Leaflet)</span>
+                            <div class="map-mock-marker" style="top: 30%; left: 45%; background: rgba(37, 99, 235, 0.9); color: #fff;">
+                                <i class="fa-solid fa-video"></i> CCTV (Y)
+                            </div>
+                            <div class="map-mock-marker" style="top: 60%; left: 70%; background: rgba(239, 68, 68, 0.9); color: #fff;">
+                                <i class="fa-solid fa-video-slash"></i> CCTV (N)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. 검증 및 테스트 계획 -->
+            <section id="verification" class="section-card">
+                <div class="section-header">
+                    <div class="section-number">6</div>
+                    <h3 class="section-title">검증 및 테스트 계획 (Verification Plan)</h3>
+                </div>
+
+                <div class="verification-list">
+                    <div class="verify-item">
+                        <div class="verify-left">
+                            <div class="verify-status-icon"><i class="fa-solid fa-check"></i></div>
+                            <div>
+                                <div class="verify-title">한글 파싱 검증</div>
+                                <div class="verify-desc">EUC-KR 인코딩 파싱 후 깨짐 없이 '어린이집', '초등학교' 등 정상 표출</div>
+                            </div>
+                        </div>
+                        <span class="verify-pass-badge">Pass 기준 수립</span>
+                    </div>
+
+                    <div class="verify-item">
+                        <div class="verify-left">
+                            <div class="verify-status-icon"><i class="fa-solid fa-check"></i></div>
+                            <div>
+                                <div class="verify-title">마커 렌더링</div>
+                                <div class="verify-desc">좌표 유효성 검사 후 14,000+개 마커가 클러스터 형태로 정상 표시됨</div>
+                            </div>
+                        </div>
+                        <span class="verify-pass-badge">Pass 기준 수립</span>
+                    </div>
+
+                    <div class="verify-item">
+                        <div class="verify-left">
+                            <div class="verify-status-icon"><i class="fa-solid fa-check"></i></div>
+                            <div>
+                                <div class="verify-title">색상 구분</div>
+                                <div class="verify-desc">CCTV Y는 파란색(#2563EB), N은 빨간색(#EF4444) 마커로 정확히 구분</div>
+                            </div>
+                        </div>
+                        <span class="verify-pass-badge">Pass 기준 수립</span>
+                    </div>
+
+                    <div class="verify-item">
+                        <div class="verify-left">
+                            <div class="verify-status-icon"><i class="fa-solid fa-check"></i></div>
+                            <div>
+                                <div class="verify-title">필터링 기능</div>
+                                <div class="verify-desc">시설종류 및 CCTV 여부 조작 시 조건 변경 즉시 지도 마커 반영</div>
+                            </div>
+                        </div>
+                        <span class="verify-pass-badge">Pass 기준 수립</span>
+                    </div>
+
+                    <div class="verify-item">
+                        <div class="verify-left">
+                            <div class="verify-status-icon"><i class="fa-solid fa-check"></i></div>
+                            <div>
+                                <div class="verify-title">팝업 출력</div>
+                                <div class="verify-desc">마커 클릭 시 대상시설명, 주소, 도로폭, 관할경찰서 4개 필드 정확 표출</div>
+                            </div>
+                        </div>
+                        <span class="verify-pass-badge">Pass 기준 수립</span>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ScrollSpy & Progress Script -->
+    <script>
+        window.addEventListener('scroll', () => {
+            // Scroll Progress
+            const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scroll-progress').style.width = scrolled + '%';
+
+            // ScrollSpy
+            const sections = document.querySelectorAll('section, header');
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                const link = item.querySelector('a');
+                if (link.getAttribute('href') === '#' + current) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

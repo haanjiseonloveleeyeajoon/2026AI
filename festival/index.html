@@ -1,0 +1,379 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRD - 부산축제모아 (Busan Festival Archive)</title>
+    <meta name="description" content="부산광역시 문화 축제 정보 통합 플랫폼 부산축제모아 제품 요구사항 정의서(PRD)">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Noto+Serif+KR:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root{--canvas:#FDFCFB;--card-bg:#F5F2EF;--text-dark:#1A1A1A;--border:#E5E1DA;--accent:#EF4444;--muted:#6B6560;--sw:260px}
+        *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+        body{font-family:'Noto Sans KR','Inter',sans-serif;background:var(--canvas);color:var(--text-dark);line-height:1.7}
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--card-bg)}::-webkit-scrollbar-thumb{background:#C9C4BC;border-radius:3px}
+        #prog{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0%;z-index:1000;transition:width .1s linear}
+        .layout{display:flex;min-height:100vh}
+        .sidebar{width:var(--sw);background:var(--text-dark);color:#fff;position:fixed;top:0;bottom:0;left:0;display:flex;flex-direction:column;padding:2rem 1.5rem;z-index:100;border-right:3px solid var(--text-dark)}
+        .sb-brand{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(255,255,255,.15)}
+        .sb-eye{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
+        .sb-title{font-family:'Playfair Display','Noto Serif KR',serif;font-size:1.5rem;font-weight:900;font-style:italic;line-height:1.2}
+        .sb-sub{font-size:.75rem;color:rgba(255,255,255,.4);margin-top:.3rem}
+        .nav-lbl{font-family:'JetBrains Mono',monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.3);margin-bottom:.6rem}
+        .nav-list{list-style:none;display:flex;flex-direction:column;gap:.1rem;flex:1}
+        .nav-list a{display:flex;align-items:center;gap:.75rem;padding:.6rem .75rem;color:rgba(255,255,255,.6);text-decoration:none;font-size:.84rem;font-weight:500;border-left:2px solid transparent;transition:all .2s}
+        .nav-list a:hover,.nav-list a.active{color:#fff;border-left-color:var(--accent);background:rgba(255,255,255,.05)}
+        .nav-list a i{width:16px;text-align:center;font-size:.8rem}
+        .sb-footer{padding-top:1.2rem;border-top:1px solid rgba(255,255,255,.12);font-size:.72rem;color:rgba(255,255,255,.3)}
+        .sd{display:inline-flex;align-items:center;gap:.4rem;color:#4ade80;font-size:.72rem;margin-bottom:.4rem}
+        .sd i{font-size:.5rem;animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+        .main{margin-left:var(--sw);flex:1;max-width:1080px}
+        .topbar{display:flex;justify-content:space-between;align-items:center;padding:1rem 3rem;border-bottom:1px solid var(--border);background:var(--canvas);position:sticky;top:0;z-index:50}
+        .btn-home{display:inline-flex;align-items:center;gap:.45rem;padding:.45rem 1rem;background:var(--text-dark);color:#fff;font-size:.82rem;font-weight:600;text-decoration:none;border:2px solid var(--text-dark);transition:all .2s}
+        .btn-home:hover{background:var(--accent);border-color:var(--accent)}
+        .btn-act{display:inline-flex;align-items:center;gap:.45rem;padding:.45rem 1rem;background:transparent;color:var(--muted);font-size:.82rem;font-weight:500;border:1px solid var(--border);cursor:pointer;font-family:inherit;transition:all .2s}
+        .btn-act:hover{border-color:var(--text-dark);color:var(--text-dark)}
+        .hero{padding:4rem 3rem 3rem;border-bottom:3px solid var(--text-dark);position:relative;overflow:hidden}
+        .hero::before{content:'PRD';position:absolute;right:3rem;top:2rem;font-family:'Playfair Display',serif;font-size:9rem;font-weight:900;font-style:italic;color:rgba(0,0,0,.04);line-height:1;pointer-events:none;user-select:none}
+        .h-eye{display:flex;align-items:center;gap:.75rem;margin-bottom:1.2rem}
+        .live-badge{display:inline-flex;align-items:center;gap:.4rem;background:var(--accent);color:#fff;font-size:.65rem;font-weight:800;padding:.25rem .7rem;letter-spacing:.1em;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
+        .eye-txt{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+        .h-title{font-family:'Playfair Display','Noto Serif KR',serif;font-size:3.8rem;font-weight:900;font-style:italic;line-height:1.05;letter-spacing:-.02em;margin-bottom:.5rem}
+        .h-title span{color:var(--accent)}
+        .h-sub{font-size:1.05rem;color:var(--muted);font-weight:400;margin-bottom:2rem;max-width:600px}
+        .meta-row{display:flex;gap:0;flex-wrap:wrap;border-top:1px solid var(--border);border-left:1px solid var(--border)}
+        .mc{padding:1rem 1.5rem;border-right:1px solid var(--border);border-bottom:1px solid var(--border);min-width:160px}
+        .ml{font-family:'JetBrains Mono',monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.25rem}
+        .mv{font-size:.88rem;font-weight:700}
+        .content{padding:0 3rem 4rem}
+        .section{padding:2.5rem 0;border-bottom:1px solid var(--border)}
+        .section:last-child{border-bottom:none}
+        .sh{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.8rem}
+        .sn{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900;font-style:italic;color:var(--accent)}
+        .st{font-family:'Playfair Display','Noto Serif KR',serif;font-size:1.6rem;font-weight:900;line-height:1.2}
+        .ov-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border)}
+        .oc{background:var(--canvas);padding:1.4rem 1.6rem}
+        .ocl{font-family:'JetBrains Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.4rem}
+        .ocv{font-size:.9rem;font-weight:600}
+        .ov-desc{margin-top:1.4rem;padding:1.5rem;background:var(--card-bg);border-left:4px solid var(--text-dark);font-size:.95rem;line-height:1.8}
+        .au-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border)}
+        .au-item{background:var(--canvas);padding:1.2rem 1.5rem;display:flex;align-items:flex-start;gap:1.2rem}
+        .au-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;font-style:italic;color:rgba(0,0,0,.08);line-height:1;flex-shrink:0;min-width:36px}
+        .au-c h4{font-size:.95rem;font-weight:700;margin-bottom:.2rem}
+        .au-c p{font-size:.85rem;color:var(--muted)}
+        .feat-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border)}
+        .fb{background:var(--canvas)}
+        .fh{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.5rem;background:var(--card-bg);border-bottom:1px solid var(--border)}
+        .fhl{display:flex;align-items:center;gap:1rem}
+        .ftag{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.25rem .6rem;border:1px solid var(--text-dark);background:var(--text-dark);color:#fff;letter-spacing:.05em}
+        .fn{font-weight:700;font-size:.95rem}
+        .fbody{padding:1.2rem 1.5rem}
+        .fbody ul{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+        .fbody li{position:relative;padding-left:1.2rem;font-size:.88rem;color:#333;line-height:1.6}
+        .fbody li::before{content:'→';position:absolute;left:0;color:var(--accent);font-weight:700}
+        .fbody li strong{color:var(--text-dark)}
+        .code{font-family:'JetBrains Mono',monospace;font-size:.8em;background:#F5F2EF;padding:.1em .3em}
+        .tc{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border)}
+        .tcol{background:var(--canvas);padding:1.5rem}
+        .tcoh{font-family:'JetBrains Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+        .tr{display:flex;justify-content:space-between;align-items:baseline;padding:.5rem 0;border-bottom:1px solid rgba(229,225,218,.5);font-size:.85rem}
+        .tr:last-child{border-bottom:none}
+        .tk{color:var(--muted);font-size:.8rem}
+        .tv{font-weight:600;text-align:right;max-width:60%}
+        .dg{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:1.5rem}
+        .dc{background:var(--canvas);padding:1.4rem 1.5rem}
+        .dct{font-family:'JetBrains Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.8rem}
+        .swatches{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem}
+        .sw{width:36px;height:36px;border:1px solid var(--border);position:relative}
+        .sw::after{content:attr(data-l);position:absolute;bottom:-1.4rem;left:50%;transform:translateX(-50%);font-size:.55rem;white-space:nowrap;color:var(--muted);font-family:'JetBrains Mono',monospace}
+        .fd{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;font-style:italic;line-height:1.1}
+        .dep{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border)}
+        .ds{background:var(--canvas);display:flex;align-items:stretch}
+        .dn{background:var(--text-dark);color:#fff;font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;font-style:italic;display:flex;align-items:center;justify-content:center;min-width:60px;flex-shrink:0}
+        .dc2{padding:1.1rem 1.5rem;flex:1}
+        .dc2 h4{font-weight:700;font-size:.95rem;margin-bottom:.2rem}
+        .dc2 p{font-size:.85rem;color:var(--muted)}
+        .ev{margin-top:.6rem;padding:.7rem 1rem;background:var(--text-dark);display:flex;flex-direction:column;gap:.3rem}
+        .er{display:flex;align-items:center;gap:.8rem;font-family:'JetBrains Mono',monospace;font-size:.76rem}
+        .ek{color:#93c5fd}.ed{color:rgba(255,255,255,.5)}
+        .wf{border:2px solid var(--text-dark);overflow:hidden;margin-top:1.2rem}
+        .wfh{background:var(--text-dark);color:#fff;padding:.5rem 1rem;display:flex;align-items:center;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.7rem}
+        .wfd{width:10px;height:10px;border-radius:50%}
+        .wfb{display:flex;height:200px}
+        .wfl{width:30%;background:var(--card-bg);border-right:1px solid var(--border);padding:1rem;display:flex;flex-direction:column;gap:.6rem}
+        .wfr{flex:1;padding:1rem;display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;align-content:start}
+        .sk{background:rgba(0,0,0,.07)}
+        .wfc{background:var(--card-bg);border:1px solid var(--border);height:80px;display:flex;align-items:center;justify-content:center}
+        .wb{background:var(--accent);color:#fff;font-size:.55rem;font-weight:700;padding:.15rem .4rem}
+        @media(max-width:900px){.sidebar{display:none}.main{margin-left:0}.topbar{padding:.8rem 1.5rem}.hero{padding:2.5rem 1.5rem 2rem}.content{padding:0 1.5rem 3rem}.h-title{font-size:2.4rem}.tc,.dg,.ov-grid{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+<div id="prog"></div>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-eye">PRD Document</div>
+      <div class="sb-title">부산<br>축제모아</div>
+      <div class="sb-sub">Busan Festival Archive</div>
+    </div>
+    <div class="nav-lbl">목차 Index</div>
+    <ul class="nav-list">
+      <li><a href="#overview"><i class="fa-solid fa-compass"></i> 프로젝트 개요</a></li>
+      <li><a href="#audience"><i class="fa-solid fa-users"></i> 타겟 사용자</a></li>
+      <li><a href="#features"><i class="fa-solid fa-list-check"></i> 핵심 기능 명세</a></li>
+      <li><a href="#techstack"><i class="fa-solid fa-layer-group"></i> 기술 스택</a></li>
+      <li><a href="#design"><i class="fa-solid fa-palette"></i> UX & 디자인</a></li>
+      <li><a href="#deploy"><i class="fa-solid fa-rocket"></i> 배포 안내</a></li>
+    </ul>
+    <div class="sb-footer">
+      <div class="sd"><i class="fa-solid fa-circle"></i> Specifications Ready</div>
+      <div>Version 1.0.0 · 2026-08-06</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <a href="../index.html" class="btn-home"><i class="fa-solid fa-house"></i> 홈으로</a>
+      <div style="display:flex;gap:.6rem">
+        <button class="btn-act" onclick="window.print()"><i class="fa-solid fa-print"></i> 인쇄 / PDF</button>
+        <button class="btn-act" onclick="navigator.clipboard.writeText(window.location.href);alert('링크가 복사되었습니다!')"><i class="fa-solid fa-link"></i> 공유</button>
+      </div>
+    </div>
+
+    <header class="hero">
+      <div class="h-eye">
+        <span class="live-badge"><i class="fa-solid fa-circle fa-xs"></i> PRD</span>
+        <span class="eye-txt">Product Requirements Document · 부산 공공데이터 축제 플랫폼</span>
+      </div>
+      <h1 class="h-title">부산<span>축제</span>모아<br><em style="font-size:.55em;color:var(--muted);font-style:italic">Busan Festival Archive</em></h1>
+      <p class="h-sub">부산광역시 16개 구·군의 문화 축제 정보를 통합 조회하고 AI 기반 맞춤형 여행 코스를 제공하는 웹 플랫폼</p>
+      <div class="meta-row">
+        <div class="mc"><div class="ml">Product Name</div><div class="mv">부산축제모아</div></div>
+        <div class="mc"><div class="ml">Design Concept</div><div class="mv">Bold Typography</div></div>
+        <div class="mc"><div class="ml">AI Engine</div><div class="mv">Gemini 2.5 Flash</div></div>
+        <div class="mc"><div class="ml">Data Source</div><div class="mv">공공데이터포털 API</div></div>
+        <div class="mc"><div class="ml">Deployment</div><div class="mv">Vercel Serverless</div></div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- 1 -->
+      <section id="overview" class="section">
+        <div class="sh"><span class="sn">01</span><h2 class="st">프로젝트 개요 (Project Overview)</h2></div>
+        <div class="ov-grid">
+          <div class="oc"><div class="ocl">제품명</div><div class="ocv">부산축제모아 (Busan Festival Archive)</div></div>
+          <div class="oc"><div class="ocl">배포 환경</div><div class="ocv">Vercel Serverless Functions &amp; Express</div></div>
+          <div class="oc"><div class="ocl">API 데이터 출처</div><div class="ocv">공공데이터포털 (data.go.kr)</div></div>
+          <div class="oc"><div class="ocl">디자인 컨셉</div><div class="ocv">Bold Typography Theme · 에디토리얼 매거진</div></div>
+        </div>
+        <div class="ov-desc">공공데이터포털(data.go.kr)의 실시간 부산 축제 API 데이터를 기반으로, 부산을 방문하는 관광객과 시민들에게 직관적인 축제 탐색, 시각적 지도를 통한 위치 파악, AI 맞춤형 코스 가이드 및 개인화(찜하기, 캘린더 저장) 기능을 제공합니다.</div>
+      </section>
+
+      <!-- 2 -->
+      <section id="audience" class="section">
+        <div class="sh"><span class="sn">02</span><h2 class="st">타겟 사용자 (Target Audience)</h2></div>
+        <div class="au-list">
+          <div class="au-item"><div class="au-num">01</div><div class="au-c"><h4>부산 여행객 &amp; 관광객</h4><p>시즌별·지역별로 가볼 만한 축제를 탐색하고 여행 동선을 계획하려는 방문객</p></div></div>
+          <div class="au-item"><div class="au-num">02</div><div class="au-c"><h4>부산 시민</h4><p>거주하는 구·군의 문화 행사 및 주말 나들이 정보를 빠르게 확인하려는 지역 주민</p></div></div>
+          <div class="au-item"><div class="au-num">03</div><div class="au-c"><h4>축제/문화 이벤트 기획자 &amp; 취재진</h4><p>부산 전역에서 개최되는 문화 행사 및 축제 정보를 일괄 조회하려는 사용자</p></div></div>
+        </div>
+      </section>
+
+      <!-- 3 -->
+      <section id="features" class="section">
+        <div class="sh"><span class="sn">03</span><h2 class="st">핵심 기능 명세 (Key Features &amp; Specifications)</h2></div>
+        <div class="feat-list">
+          <div class="fb">
+            <div class="fh"><div class="fhl"><span class="ftag">3.1</span><span class="fn">실시간 공공데이터 연동 및 폴백 시스템</span></div><i class="fa-solid fa-database" style="color:var(--muted)"></i></div>
+            <div class="fbody"><ul>
+              <li><strong>데이터 출처</strong>: 공공데이터포털 부산광역시 축제 서비스 API (<span class="code">getFestivalKr</span>)</li>
+              <li><strong>API 프록시 엔드포인트</strong>: <span class="code">/api/festivals</span></li>
+              <li><strong>캐싱</strong>: 10분 주기 메모리 캐싱으로 API 호출 최적화</li>
+              <li><strong>폴백(Fallback)</strong>: 공공데이터포털 트래픽 초과·점검 시 검증된 대표 축제 정제 데이터로 자동 전환</li>
+            </ul></div>
+          </div>
+          <div class="fb">
+            <div class="fh"><div class="fhl"><span class="ftag">3.2</span><span class="fn">탐색 및 필터링 (Search &amp; Filtering)</span></div><i class="fa-solid fa-filter" style="color:var(--muted)"></i></div>
+            <div class="fbody"><ul>
+              <li><strong>지역별 필터</strong>: 부산 16개 구·군(해운대구, 수영구, 중구, 영도구, 동래구 등) 독립 필터링 및 카운트 표시</li>
+              <li><strong>시기별 필터</strong>: 1월~12월 월별 개최 축제 분류 및 전체보기</li>
+              <li><strong>키워드 실시간 검색</strong>: 축제명, 장소, 구·군 명칭 실시간 쿼리 매칭</li>
+              <li><strong>정렬 기능</strong>: 날짜순(최신순), 축제명순 정렬</li>
+              <li><strong>찜한 축제 전용 뷰</strong>: 브라우저 <span class="code">localStorage</span> 기반 개인화 찜 목록 관리</li>
+            </ul></div>
+          </div>
+          <div class="fb">
+            <div class="fh"><div class="fhl"><span class="ftag">3.3</span><span class="fn">멀티 뷰 모드 (Multi-View System)</span></div><i class="fa-solid fa-table-cells-large" style="color:var(--muted)"></i></div>
+            <div class="fbody"><ul>
+              <li><strong>그리드 뷰 (Grid View)</strong>: 카드형 에디토리얼 레이아웃 — 대표 이미지, 뱃지, 날짜, 장소 제공</li>
+              <li><strong>리스트 뷰 (List View)</strong>: 가로형 리스트 패턴으로 긴 설명과 정보를 빠르게 스캔</li>
+              <li><strong>대화형 지도 뷰 (Map View)</strong>: Leaflet 기반 커스텀 마커 지도, 클릭 시 인포 팝업 및 상세 보기 연동</li>
+            </ul></div>
+          </div>
+          <div class="fb">
+            <div class="fh"><div class="fhl"><span class="ftag">3.4</span><span class="fn">축제 상세 모달 (Festival Detail Modal)</span></div><i class="fa-solid fa-circle-info" style="color:var(--muted)"></i></div>
+            <div class="fbody"><ul>
+              <li><strong>시각적 히어로 영역</strong>: 고화질 축제 이미지 및 구·군 식별 뱃지</li>
+              <li><strong>상세 정보 패널</strong>: 기간, 운영 시간, 이용 요금, 문의 전화(<span class="code">tel:</span> 바로 연결), 주소 복사</li>
+              <li><strong>캘린더 저장</strong>: <span class="code">.ics</span> 파일 생성 → 구글/애플/아웃룩 캘린더 연동</li>
+              <li><strong>공유하기</strong>: 현재 축제 URL 클립보드 복사</li>
+              <li><strong>공식 홈페이지 바로가기</strong>: 외부 링크 이동</li>
+            </ul></div>
+          </div>
+          <div class="fb">
+            <div class="fh"><div class="fhl"><span class="ftag">3.5</span><span class="fn">Gemini AI 맞춤형 여행 가이드 (AI Tour Guide)</span></div><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent)"></i></div>
+            <div class="fbody"><ul>
+              <li><strong>엔드포인트</strong>: <span class="code">/api/ai-recommendation</span> (Serverless Function)</li>
+              <li><strong>AI 모델</strong>: Google GenAI <span class="code">gemini-2.5-flash</span></li>
+              <li><strong>맞춤 동선 생성</strong>: 선택 축제·구·군·월별 조건 기반 관광 동선, 교통 팁, 주변 맛집·명소 추천</li>
+              <li><strong>프리셋 버튼</strong>: 해운대 당일치기 코스, 데이트 코스 추천 등 자주 묻는 질문 원클릭 제공</li>
+            </ul></div>
+          </div>
+        </div>
+        <!-- Wireframe -->
+        <div class="wf">
+          <div class="wfh">
+            <span class="wfd" style="background:#ef4444"></span>
+            <span class="wfd" style="background:#f59e0b"></span>
+            <span class="wfd" style="background:#10b981"></span>
+            <span style="margin-left:.5rem;color:rgba(255,255,255,.5)">부산축제모아 UI Layout Preview · Grid View</span>
+          </div>
+          <div class="wfb">
+            <div class="wfl">
+              <div class="sk" style="height:12px;width:60%"></div>
+              <div class="sk" style="height:28px;width:100%;margin-top:.3rem"></div>
+              <div style="margin-top:.5rem;display:flex;flex-direction:column;gap:.3rem">
+                <div class="sk" style="height:10px;width:80%"></div>
+                <div class="sk" style="height:10px;width:70%"></div>
+                <div class="sk" style="height:10px;width:90%"></div>
+              </div>
+              <div style="margin-top:auto"><div class="sk" style="height:28px;width:100%;background:rgba(239,68,68,.25)"></div></div>
+            </div>
+            <div class="wfr">
+              <div class="wfc"><span class="wb">해운대</span></div>
+              <div class="wfc"><span class="wb">수영구</span></div>
+              <div class="wfc"><span class="wb">중구</span></div>
+              <div class="wfc" style="opacity:.4"></div>
+              <div class="wfc" style="opacity:.4"></div>
+              <div class="wfc" style="opacity:.4"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 -->
+      <section id="techstack" class="section">
+        <div class="sh"><span class="sn">04</span><h2 class="st">기술 스택 (Tech Stack)</h2></div>
+        <div class="tc">
+          <div class="tcol">
+            <div class="tcoh">Frontend</div>
+            <div class="tr"><span class="tk">Framework</span><span class="tv">React 18, Vite</span></div>
+            <div class="tr"><span class="tk">Language</span><span class="tv">TypeScript</span></div>
+            <div class="tr"><span class="tk">Styling</span><span class="tv">Tailwind CSS (v4)</span></div>
+            <div class="tr"><span class="tk">Typography</span><span class="tv">Playfair Display, Noto Serif KR</span></div>
+            <div class="tr"><span class="tk">Icons</span><span class="tv">Lucide React</span></div>
+            <div class="tr"><span class="tk">Map Library</span><span class="tv">Leaflet, React-Leaflet</span></div>
+          </div>
+          <div class="tcol">
+            <div class="tcoh">Backend &amp; API</div>
+            <div class="tr"><span class="tk">Runtime</span><span class="tv">Node.js, Express</span></div>
+            <div class="tr"><span class="tk">Serverless</span><span class="tv">Vercel Node Functions</span></div>
+            <div class="tr"><span class="tk">AI SDK</span><span class="tv">@google/genai (Gemini API)</span></div>
+            <div class="tr"><span class="tk">Data Source</span><span class="tv">공공데이터포털 REST API</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 -->
+      <section id="design" class="section">
+        <div class="sh"><span class="sn">05</span><h2 class="st">UX &amp; 디자인 가이드라인</h2></div>
+        <div class="dg">
+          <div class="dc">
+            <div class="dct">Color Palette</div>
+            <div class="swatches" style="margin-bottom:1.5rem">
+              <div class="sw" style="background:#FDFCFB" data-l="Canvas"></div>
+              <div class="sw" style="background:#F5F2EF" data-l="Card"></div>
+              <div class="sw" style="background:#1A1A1A" data-l="Text"></div>
+              <div class="sw" style="background:#EF4444" data-l="Accent"></div>
+              <div class="sw" style="background:#E5E1DA" data-l="Border"></div>
+            </div>
+            <div style="margin-top:1.5rem;font-size:.82rem;color:var(--muted);display:flex;flex-direction:column;gap:.3rem">
+              <div><span class="code">#FDFCFB</span> — Off-white Canvas</div>
+              <div><span class="code">#1A1A1A</span> — Rich Dark Neutral</div>
+              <div><span class="code">#EF4444</span> — Live Red Badge / Accent</div>
+            </div>
+          </div>
+          <div class="dc">
+            <div class="dct">Typography</div>
+            <div class="fd">Festival</div>
+            <div style="font-size:.85rem;color:var(--muted);margin-top:.4rem">부산축제모아 Bold Editorial</div>
+            <div style="margin-top:1rem;font-size:.82rem;color:var(--muted);display:flex;flex-direction:column;gap:.3rem">
+              <div><strong>Display</strong>: Playfair Display — Black, Italic</div>
+              <div><strong>Korean</strong>: Noto Serif KR — 900</div>
+              <div><strong>Body</strong>: Sans-serif System</div>
+              <div><strong>Mono</strong>: JetBrains Mono</div>
+            </div>
+          </div>
+          <div class="dc">
+            <div class="dct">Component Rules</div>
+            <div style="font-size:.85rem;line-height:1.8">
+              <div>✦ Sharp rectangular borders (<span class="code">border-[#E5E1DA]</span>)</div>
+              <div>✦ <span class="code">rounded-none</span> 스타일 지향 (매거진 룩)</div>
+              <div>✦ 고대비 에디토리얼 타이포그래피</div>
+              <div>✦ 세리프 / 산세리프 조화 믹스</div>
+            </div>
+          </div>
+          <div class="dc">
+            <div class="dct">Design System Notes</div>
+            <div style="font-size:.85rem;line-height:1.8">
+              <div>✦ Black, Italic, Uppercase 수치/영문 헤더</div>
+              <div>✦ Tracking-tighter 레터스페이싱</div>
+              <div>✦ Live RED 뱃지로 실시간 데이터 강조</div>
+              <div>✦ 카드형 컨테이너: <span class="code">#F5F2EF</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6 -->
+      <section id="deploy" class="section">
+        <div class="sh"><span class="sn">06</span><h2 class="st">배포 및 이관 안내 (Deployment Guide)</h2></div>
+        <div class="dep">
+          <div class="ds"><div class="dn">1</div><div class="dc2"><h4>Repository 연결</h4><p>GitHub에 코드를 업로드한 후 Vercel에 프로젝트 연결</p></div></div>
+          <div class="ds">
+            <div class="dn">2</div>
+            <div class="dc2">
+              <h4>환경 변수 설정 (Environment Variables)</h4>
+              <p>아래 환경 변수를 Vercel 프로젝트 설정에서 등록합니다.</p>
+              <div class="ev">
+                <div class="er"><span class="ek">GEMINI_API_KEY</span><span class="ed">Google Gemini API Key</span></div>
+                <div class="er"><span class="ek">FESTIVAL_SERVICE_KEY</span><span class="ed">공공데이터포털 인증키 (미설정 시 기본 공공키 작동)</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="ds"><div class="dn">3</div><div class="dc2"><h4>빌드 설정</h4><p>Framework Preset: <strong>Vite</strong> &nbsp;·&nbsp; Build Command: <span class="code">npm run build</span> &nbsp;·&nbsp; Output: <span class="code">dist</span></p></div></div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const ws=document.documentElement.scrollTop||document.body.scrollTop;
+  const h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+  document.getElementById('prog').style.width=(ws/h*100)+'%';
+  const ids=['overview','audience','features','techstack','design','deploy'];
+  let cur='';
+  ids.forEach(id=>{const el=document.getElementById(id);if(el&&window.scrollY>=el.offsetTop-120)cur=id;});
+  document.querySelectorAll('.nav-list a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+});
+</script>
+</body>
+</html>
