@@ -1,379 +1,1155 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PRD - 부산축제모아 (Busan Festival Archive)</title>
-    <meta name="description" content="부산광역시 문화 축제 정보 통합 플랫폼 부산축제모아 제품 요구사항 정의서(PRD)">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Noto+Serif+KR:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <title>Festival 01 - 디지털 축제 플랫폼 & 프로젝트 안내</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Noto Sans KR -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Noto+Sans+KR:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        },
+                        accent: {
+                            pink: '#ec4899',
+                            cyan: '#06b6d4',
+                            amber: '#f59e0b',
+                            purple: '#a855f7'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans KR', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root{--canvas:#FDFCFB;--card-bg:#F5F2EF;--text-dark:#1A1A1A;--border:#E5E1DA;--accent:#EF4444;--muted:#6B6560;--sw:260px}
-        *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
-        body{font-family:'Noto Sans KR','Inter',sans-serif;background:var(--canvas);color:var(--text-dark);line-height:1.7}
-        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--card-bg)}::-webkit-scrollbar-thumb{background:#C9C4BC;border-radius:3px}
-        #prog{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0%;z-index:1000;transition:width .1s linear}
-        .layout{display:flex;min-height:100vh}
-        .sidebar{width:var(--sw);background:var(--text-dark);color:#fff;position:fixed;top:0;bottom:0;left:0;display:flex;flex-direction:column;padding:2rem 1.5rem;z-index:100;border-right:3px solid var(--text-dark)}
-        .sb-brand{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(255,255,255,.15)}
-        .sb-eye{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
-        .sb-title{font-family:'Playfair Display','Noto Serif KR',serif;font-size:1.5rem;font-weight:900;font-style:italic;line-height:1.2}
-        .sb-sub{font-size:.75rem;color:rgba(255,255,255,.4);margin-top:.3rem}
-        .nav-lbl{font-family:'JetBrains Mono',monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.3);margin-bottom:.6rem}
-        .nav-list{list-style:none;display:flex;flex-direction:column;gap:.1rem;flex:1}
-        .nav-list a{display:flex;align-items:center;gap:.75rem;padding:.6rem .75rem;color:rgba(255,255,255,.6);text-decoration:none;font-size:.84rem;font-weight:500;border-left:2px solid transparent;transition:all .2s}
-        .nav-list a:hover,.nav-list a.active{color:#fff;border-left-color:var(--accent);background:rgba(255,255,255,.05)}
-        .nav-list a i{width:16px;text-align:center;font-size:.8rem}
-        .sb-footer{padding-top:1.2rem;border-top:1px solid rgba(255,255,255,.12);font-size:.72rem;color:rgba(255,255,255,.3)}
-        .sd{display:inline-flex;align-items:center;gap:.4rem;color:#4ade80;font-size:.72rem;margin-bottom:.4rem}
-        .sd i{font-size:.5rem;animation:pulse 2s infinite}
-        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-        .main{margin-left:var(--sw);flex:1;max-width:1080px}
-        .topbar{display:flex;justify-content:space-between;align-items:center;padding:1rem 3rem;border-bottom:1px solid var(--border);background:var(--canvas);position:sticky;top:0;z-index:50}
-        .btn-home{display:inline-flex;align-items:center;gap:.45rem;padding:.45rem 1rem;background:var(--text-dark);color:#fff;font-size:.82rem;font-weight:600;text-decoration:none;border:2px solid var(--text-dark);transition:all .2s}
-        .btn-home:hover{background:var(--accent);border-color:var(--accent)}
-        .btn-act{display:inline-flex;align-items:center;gap:.45rem;padding:.45rem 1rem;background:transparent;color:var(--muted);font-size:.82rem;font-weight:500;border:1px solid var(--border);cursor:pointer;font-family:inherit;transition:all .2s}
-        .btn-act:hover{border-color:var(--text-dark);color:var(--text-dark)}
-        .hero{padding:4rem 3rem 3rem;border-bottom:3px solid var(--text-dark);position:relative;overflow:hidden}
-        .hero::before{content:'PRD';position:absolute;right:3rem;top:2rem;font-family:'Playfair Display',serif;font-size:9rem;font-weight:900;font-style:italic;color:rgba(0,0,0,.04);line-height:1;pointer-events:none;user-select:none}
-        .h-eye{display:flex;align-items:center;gap:.75rem;margin-bottom:1.2rem}
-        .live-badge{display:inline-flex;align-items:center;gap:.4rem;background:var(--accent);color:#fff;font-size:.65rem;font-weight:800;padding:.25rem .7rem;letter-spacing:.1em;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
-        .eye-txt{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-        .h-title{font-family:'Playfair Display','Noto Serif KR',serif;font-size:3.8rem;font-weight:900;font-style:italic;line-height:1.05;letter-spacing:-.02em;margin-bottom:.5rem}
-        .h-title span{color:var(--accent)}
-        .h-sub{font-size:1.05rem;color:var(--muted);font-weight:400;margin-bottom:2rem;max-width:600px}
-        .meta-row{display:flex;gap:0;flex-wrap:wrap;border-top:1px solid var(--border);border-left:1px solid var(--border)}
-        .mc{padding:1rem 1.5rem;border-right:1px solid var(--border);border-bottom:1px solid var(--border);min-width:160px}
-        .ml{font-family:'JetBrains Mono',monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.25rem}
-        .mv{font-size:.88rem;font-weight:700}
-        .content{padding:0 3rem 4rem}
-        .section{padding:2.5rem 0;border-bottom:1px solid var(--border)}
-        .section:last-child{border-bottom:none}
-        .sh{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.8rem}
-        .sn{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900;font-style:italic;color:var(--accent)}
-        .st{font-family:'Playfair Display','Noto Serif KR',serif;font-size:1.6rem;font-weight:900;line-height:1.2}
-        .ov-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border)}
-        .oc{background:var(--canvas);padding:1.4rem 1.6rem}
-        .ocl{font-family:'JetBrains Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.4rem}
-        .ocv{font-size:.9rem;font-weight:600}
-        .ov-desc{margin-top:1.4rem;padding:1.5rem;background:var(--card-bg);border-left:4px solid var(--text-dark);font-size:.95rem;line-height:1.8}
-        .au-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border)}
-        .au-item{background:var(--canvas);padding:1.2rem 1.5rem;display:flex;align-items:flex-start;gap:1.2rem}
-        .au-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;font-style:italic;color:rgba(0,0,0,.08);line-height:1;flex-shrink:0;min-width:36px}
-        .au-c h4{font-size:.95rem;font-weight:700;margin-bottom:.2rem}
-        .au-c p{font-size:.85rem;color:var(--muted)}
-        .feat-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border)}
-        .fb{background:var(--canvas)}
-        .fh{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.5rem;background:var(--card-bg);border-bottom:1px solid var(--border)}
-        .fhl{display:flex;align-items:center;gap:1rem}
-        .ftag{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.25rem .6rem;border:1px solid var(--text-dark);background:var(--text-dark);color:#fff;letter-spacing:.05em}
-        .fn{font-weight:700;font-size:.95rem}
-        .fbody{padding:1.2rem 1.5rem}
-        .fbody ul{list-style:none;display:flex;flex-direction:column;gap:.5rem}
-        .fbody li{position:relative;padding-left:1.2rem;font-size:.88rem;color:#333;line-height:1.6}
-        .fbody li::before{content:'→';position:absolute;left:0;color:var(--accent);font-weight:700}
-        .fbody li strong{color:var(--text-dark)}
-        .code{font-family:'JetBrains Mono',monospace;font-size:.8em;background:#F5F2EF;padding:.1em .3em}
-        .tc{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border)}
-        .tcol{background:var(--canvas);padding:1.5rem}
-        .tcoh{font-family:'JetBrains Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
-        .tr{display:flex;justify-content:space-between;align-items:baseline;padding:.5rem 0;border-bottom:1px solid rgba(229,225,218,.5);font-size:.85rem}
-        .tr:last-child{border-bottom:none}
-        .tk{color:var(--muted);font-size:.8rem}
-        .tv{font-weight:600;text-align:right;max-width:60%}
-        .dg{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:1.5rem}
-        .dc{background:var(--canvas);padding:1.4rem 1.5rem}
-        .dct{font-family:'JetBrains Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.8rem}
-        .swatches{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem}
-        .sw{width:36px;height:36px;border:1px solid var(--border);position:relative}
-        .sw::after{content:attr(data-l);position:absolute;bottom:-1.4rem;left:50%;transform:translateX(-50%);font-size:.55rem;white-space:nowrap;color:var(--muted);font-family:'JetBrains Mono',monospace}
-        .fd{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;font-style:italic;line-height:1.1}
-        .dep{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border)}
-        .ds{background:var(--canvas);display:flex;align-items:stretch}
-        .dn{background:var(--text-dark);color:#fff;font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;font-style:italic;display:flex;align-items:center;justify-content:center;min-width:60px;flex-shrink:0}
-        .dc2{padding:1.1rem 1.5rem;flex:1}
-        .dc2 h4{font-weight:700;font-size:.95rem;margin-bottom:.2rem}
-        .dc2 p{font-size:.85rem;color:var(--muted)}
-        .ev{margin-top:.6rem;padding:.7rem 1rem;background:var(--text-dark);display:flex;flex-direction:column;gap:.3rem}
-        .er{display:flex;align-items:center;gap:.8rem;font-family:'JetBrains Mono',monospace;font-size:.76rem}
-        .ek{color:#93c5fd}.ed{color:rgba(255,255,255,.5)}
-        .wf{border:2px solid var(--text-dark);overflow:hidden;margin-top:1.2rem}
-        .wfh{background:var(--text-dark);color:#fff;padding:.5rem 1rem;display:flex;align-items:center;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.7rem}
-        .wfd{width:10px;height:10px;border-radius:50%}
-        .wfb{display:flex;height:200px}
-        .wfl{width:30%;background:var(--card-bg);border-right:1px solid var(--border);padding:1rem;display:flex;flex-direction:column;gap:.6rem}
-        .wfr{flex:1;padding:1rem;display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;align-content:start}
-        .sk{background:rgba(0,0,0,.07)}
-        .wfc{background:var(--card-bg);border:1px solid var(--border);height:80px;display:flex;align-items:center;justify-content:center}
-        .wb{background:var(--accent);color:#fff;font-size:.55rem;font-weight:700;padding:.15rem .4rem}
-        @media(max-width:900px){.sidebar{display:none}.main{margin-left:0}.topbar{padding:.8rem 1.5rem}.hero{padding:2.5rem 1.5rem 2rem}.content{padding:0 1.5rem 3rem}.h-title{font-size:2.4rem}.tc,.dg,.ov-grid{grid-template-columns:1fr}}
+        /* Custom animations & Glassmorphism styles */
+        body {
+            font-family: 'Noto Sans KR', 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -10px rgba(99, 102, 241, 0.3);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glow-effect {
+            position: relative;
+        }
+        .glow-effect::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #ec4899, #8b5cf6, #06b6d4);
+            border-radius: inherit;
+            z-index: -1;
+            filter: blur(8px);
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+        .glow-effect:hover::before {
+            opacity: 1;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6366f1;
+        }
     </style>
 </head>
-<body>
-<div id="prog"></div>
-<div class="layout">
-  <aside class="sidebar">
-    <div class="sb-brand">
-      <div class="sb-eye">PRD Document</div>
-      <div class="sb-title">부산<br>축제모아</div>
-      <div class="sb-sub">Busan Festival Archive</div>
-    </div>
-    <div class="nav-lbl">목차 Index</div>
-    <ul class="nav-list">
-      <li><a href="#overview"><i class="fa-solid fa-compass"></i> 프로젝트 개요</a></li>
-      <li><a href="#audience"><i class="fa-solid fa-users"></i> 타겟 사용자</a></li>
-      <li><a href="#features"><i class="fa-solid fa-list-check"></i> 핵심 기능 명세</a></li>
-      <li><a href="#techstack"><i class="fa-solid fa-layer-group"></i> 기술 스택</a></li>
-      <li><a href="#design"><i class="fa-solid fa-palette"></i> UX & 디자인</a></li>
-      <li><a href="#deploy"><i class="fa-solid fa-rocket"></i> 배포 안내</a></li>
-    </ul>
-    <div class="sb-footer">
-      <div class="sd"><i class="fa-solid fa-circle"></i> Specifications Ready</div>
-      <div>Version 1.0.0 · 2026-08-06</div>
-    </div>
-  </aside>
+<body class="min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
 
-  <main class="main">
-    <div class="topbar">
-      <a href="../index.html" class="btn-home"><i class="fa-solid fa-house"></i> 홈으로</a>
-      <div style="display:flex;gap:.6rem">
-        <button class="btn-act" onclick="window.print()"><i class="fa-solid fa-print"></i> 인쇄 / PDF</button>
-        <button class="btn-act" onclick="navigator.clipboard.writeText(window.location.href);alert('링크가 복사되었습니다!')"><i class="fa-solid fa-link"></i> 공유</button>
-      </div>
-    </div>
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo & Deployment badge -->
+                <div class="flex items-center space-x-3">
+                    <a href="#" class="flex items-center space-x-2">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 via-accent-purple to-accent-pink flex items-center justify-center text-white shadow-lg shadow-brand-500/30">
+                            <i class="fa-solid font-bold text-lg fa-compact-disc animate-spin-slow"></i>
+                        </div>
+                        <span class="text-xl font-extrabold tracking-tight text-white">FESTIVAL <span class="gradient-text">01</span></span>
+                    </a>
+                    <a href="https://vercel.com/moon20091204-7447s-projects/festival-01" target="_blank" class="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 hover:border-brand-500 transition-colors">
+                        <i class="fa-solid fa-triangle font-serif text-[10px] text-white mr-1.5"></i> Vercel Live Project
+                    </a>
+                </div>
 
-    <header class="hero">
-      <div class="h-eye">
-        <span class="live-badge"><i class="fa-solid fa-circle fa-xs"></i> PRD</span>
-        <span class="eye-txt">Product Requirements Document · 부산 공공데이터 축제 플랫폼</span>
-      </div>
-      <h1 class="h-title">부산<span>축제</span>모아<br><em style="font-size:.55em;color:var(--muted);font-style:italic">Busan Festival Archive</em></h1>
-      <p class="h-sub">부산광역시 16개 구·군의 문화 축제 정보를 통합 조회하고 AI 기반 맞춤형 여행 코스를 제공하는 웹 플랫폼</p>
-      <div class="meta-row">
-        <div class="mc"><div class="ml">Product Name</div><div class="mv">부산축제모아</div></div>
-        <div class="mc"><div class="ml">Design Concept</div><div class="mv">Bold Typography</div></div>
-        <div class="mc"><div class="ml">AI Engine</div><div class="mv">Gemini 2.5 Flash</div></div>
-        <div class="mc"><div class="ml">Data Source</div><div class="mv">공공데이터포털 API</div></div>
-        <div class="mc"><div class="ml">Deployment</div><div class="mv">Vercel Serverless</div></div>
-      </div>
+                <!-- Desktop Nav Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <button onclick="scrollToSection('hero')" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">개요</button>
+                    <button onclick="scrollToSection('lineup')" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">공연 라인업</button>
+                    <button onclick="scrollToSection('map')" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">스마트 지도</button>
+                    <button onclick="scrollToSection('booths')" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">푸드트럭/부스</button>
+                    <button onclick="scrollToSection('stamps')" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">스탬프 투어</button>
+                    <button onclick="scrollToSection('guestbook')" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">방명록</button>
+                    <button onclick="scrollToSection('tech')" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">기술 구조</button>
+                </nav>
+
+                <!-- Action Button -->
+                <div class="flex items-center space-x-3">
+                    <button onclick="openModal('projectModal')" class="inline-flex items-center px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-brand-600 to-accent-purple hover:from-brand-500 hover:to-accent-pink shadow-md hover:shadow-brand-500/20 transition-all transform hover:-translate-y-0.5">
+                        <i class="fa-solid fa-code-branch mr-2"></i> 프로젝트 정보
+                    </button>
+                    <!-- Mobile Hamburger Menu Button -->
+                    <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-slate-800 bg-slate-900/95 px-4 pt-2 pb-4 space-y-1">
+            <button onclick="scrollToSection('hero'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-slate-300 hover:bg-slate-800">개요</button>
+            <button onclick="scrollToSection('lineup'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-slate-300 hover:bg-slate-800">공연 라인업</button>
+            <button onclick="scrollToSection('map'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-slate-300 hover:bg-slate-800">스마트 지도</button>
+            <button onclick="scrollToSection('booths'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-slate-300 hover:bg-slate-800">푸드트럭/부스</button>
+            <button onclick="scrollToSection('stamps'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-slate-300 hover:bg-slate-800">스탬프 투어</button>
+            <button onclick="scrollToSection('guestbook'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-slate-300 hover:bg-slate-800">방명록</button>
+            <button onclick="scrollToSection('tech'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-slate-300 hover:bg-slate-800">기술 구조</button>
+        </div>
     </header>
 
-    <div class="content">
+    <!-- Main Content Wrapper -->
+    <main class="flex-grow">
 
-      <!-- 1 -->
-      <section id="overview" class="section">
-        <div class="sh"><span class="sn">01</span><h2 class="st">프로젝트 개요 (Project Overview)</h2></div>
-        <div class="ov-grid">
-          <div class="oc"><div class="ocl">제품명</div><div class="ocv">부산축제모아 (Busan Festival Archive)</div></div>
-          <div class="oc"><div class="ocl">배포 환경</div><div class="ocv">Vercel Serverless Functions &amp; Express</div></div>
-          <div class="oc"><div class="ocl">API 데이터 출처</div><div class="ocv">공공데이터포털 (data.go.kr)</div></div>
-          <div class="oc"><div class="ocl">디자인 컨셉</div><div class="ocv">Bold Typography Theme · 에디토리얼 매거진</div></div>
-        </div>
-        <div class="ov-desc">공공데이터포털(data.go.kr)의 실시간 부산 축제 API 데이터를 기반으로, 부산을 방문하는 관광객과 시민들에게 직관적인 축제 탐색, 시각적 지도를 통한 위치 파악, AI 맞춤형 코스 가이드 및 개인화(찜하기, 캘린더 저장) 기능을 제공합니다.</div>
-      </section>
+        <!-- Hero Section -->
+        <section id="hero" class="relative pt-12 pb-20 md:pt-20 md:pb-28 overflow-hidden">
+            <!-- Ambient Light Background Elements -->
+            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-brand-600/30 to-accent-pink/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute top-1/3 right-10 w-[300px] h-[300px] bg-accent-cyan/20 rounded-full blur-2xl pointer-events-none"></div>
 
-      <!-- 2 -->
-      <section id="audience" class="section">
-        <div class="sh"><span class="sn">02</span><h2 class="st">타겟 사용자 (Target Audience)</h2></div>
-        <div class="au-list">
-          <div class="au-item"><div class="au-num">01</div><div class="au-c"><h4>부산 여행객 &amp; 관광객</h4><p>시즌별·지역별로 가볼 만한 축제를 탐색하고 여행 동선을 계획하려는 방문객</p></div></div>
-          <div class="au-item"><div class="au-num">02</div><div class="au-c"><h4>부산 시민</h4><p>거주하는 구·군의 문화 행사 및 주말 나들이 정보를 빠르게 확인하려는 지역 주민</p></div></div>
-          <div class="au-item"><div class="au-num">03</div><div class="au-c"><h4>축제/문화 이벤트 기획자 &amp; 취재진</h4><p>부산 전역에서 개최되는 문화 행사 및 축제 정보를 일괄 조회하려는 사용자</p></div></div>
-        </div>
-      </section>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                
+                <!-- Status Badge -->
+                <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-slate-800/80 border border-slate-700/80 text-xs sm:text-sm font-medium text-slate-300 mb-6 shadow-inner">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span class="text-emerald-400 font-semibold">2026 LIVE FESTIVAL</span>
+                    <span class="text-slate-500">|</span>
+                    <span>Vercel 스마트 축제 가이드 프로젝트</span>
+                </div>
 
-      <!-- 3 -->
-      <section id="features" class="section">
-        <div class="sh"><span class="sn">03</span><h2 class="st">핵심 기능 명세 (Key Features &amp; Specifications)</h2></div>
-        <div class="feat-list">
-          <div class="fb">
-            <div class="fh"><div class="fhl"><span class="ftag">3.1</span><span class="fn">실시간 공공데이터 연동 및 폴백 시스템</span></div><i class="fa-solid fa-database" style="color:var(--muted)"></i></div>
-            <div class="fbody"><ul>
-              <li><strong>데이터 출처</strong>: 공공데이터포털 부산광역시 축제 서비스 API (<span class="code">getFestivalKr</span>)</li>
-              <li><strong>API 프록시 엔드포인트</strong>: <span class="code">/api/festivals</span></li>
-              <li><strong>캐싱</strong>: 10분 주기 메모리 캐싱으로 API 호출 최적화</li>
-              <li><strong>폴백(Fallback)</strong>: 공공데이터포털 트래픽 초과·점검 시 검증된 대표 축제 정제 데이터로 자동 전환</li>
-            </ul></div>
-          </div>
-          <div class="fb">
-            <div class="fh"><div class="fhl"><span class="ftag">3.2</span><span class="fn">탐색 및 필터링 (Search &amp; Filtering)</span></div><i class="fa-solid fa-filter" style="color:var(--muted)"></i></div>
-            <div class="fbody"><ul>
-              <li><strong>지역별 필터</strong>: 부산 16개 구·군(해운대구, 수영구, 중구, 영도구, 동래구 등) 독립 필터링 및 카운트 표시</li>
-              <li><strong>시기별 필터</strong>: 1월~12월 월별 개최 축제 분류 및 전체보기</li>
-              <li><strong>키워드 실시간 검색</strong>: 축제명, 장소, 구·군 명칭 실시간 쿼리 매칭</li>
-              <li><strong>정렬 기능</strong>: 날짜순(최신순), 축제명순 정렬</li>
-              <li><strong>찜한 축제 전용 뷰</strong>: 브라우저 <span class="code">localStorage</span> 기반 개인화 찜 목록 관리</li>
-            </ul></div>
-          </div>
-          <div class="fb">
-            <div class="fh"><div class="fhl"><span class="ftag">3.3</span><span class="fn">멀티 뷰 모드 (Multi-View System)</span></div><i class="fa-solid fa-table-cells-large" style="color:var(--muted)"></i></div>
-            <div class="fbody"><ul>
-              <li><strong>그리드 뷰 (Grid View)</strong>: 카드형 에디토리얼 레이아웃 — 대표 이미지, 뱃지, 날짜, 장소 제공</li>
-              <li><strong>리스트 뷰 (List View)</strong>: 가로형 리스트 패턴으로 긴 설명과 정보를 빠르게 스캔</li>
-              <li><strong>대화형 지도 뷰 (Map View)</strong>: Leaflet 기반 커스텀 마커 지도, 클릭 시 인포 팝업 및 상세 보기 연동</li>
-            </ul></div>
-          </div>
-          <div class="fb">
-            <div class="fh"><div class="fhl"><span class="ftag">3.4</span><span class="fn">축제 상세 모달 (Festival Detail Modal)</span></div><i class="fa-solid fa-circle-info" style="color:var(--muted)"></i></div>
-            <div class="fbody"><ul>
-              <li><strong>시각적 히어로 영역</strong>: 고화질 축제 이미지 및 구·군 식별 뱃지</li>
-              <li><strong>상세 정보 패널</strong>: 기간, 운영 시간, 이용 요금, 문의 전화(<span class="code">tel:</span> 바로 연결), 주소 복사</li>
-              <li><strong>캘린더 저장</strong>: <span class="code">.ics</span> 파일 생성 → 구글/애플/아웃룩 캘린더 연동</li>
-              <li><strong>공유하기</strong>: 현재 축제 URL 클립보드 복사</li>
-              <li><strong>공식 홈페이지 바로가기</strong>: 외부 링크 이동</li>
-            </ul></div>
-          </div>
-          <div class="fb">
-            <div class="fh"><div class="fhl"><span class="ftag">3.5</span><span class="fn">Gemini AI 맞춤형 여행 가이드 (AI Tour Guide)</span></div><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent)"></i></div>
-            <div class="fbody"><ul>
-              <li><strong>엔드포인트</strong>: <span class="code">/api/ai-recommendation</span> (Serverless Function)</li>
-              <li><strong>AI 모델</strong>: Google GenAI <span class="code">gemini-2.5-flash</span></li>
-              <li><strong>맞춤 동선 생성</strong>: 선택 축제·구·군·월별 조건 기반 관광 동선, 교통 팁, 주변 맛집·명소 추천</li>
-              <li><strong>프리셋 버튼</strong>: 해운대 당일치기 코스, 데이트 코스 추천 등 자주 묻는 질문 원클릭 제공</li>
-            </ul></div>
-          </div>
-        </div>
-        <!-- Wireframe -->
-        <div class="wf">
-          <div class="wfh">
-            <span class="wfd" style="background:#ef4444"></span>
-            <span class="wfd" style="background:#f59e0b"></span>
-            <span class="wfd" style="background:#10b981"></span>
-            <span style="margin-left:.5rem;color:rgba(255,255,255,.5)">부산축제모아 UI Layout Preview · Grid View</span>
-          </div>
-          <div class="wfb">
-            <div class="wfl">
-              <div class="sk" style="height:12px;width:60%"></div>
-              <div class="sk" style="height:28px;width:100%;margin-top:.3rem"></div>
-              <div style="margin-top:.5rem;display:flex;flex-direction:column;gap:.3rem">
-                <div class="sk" style="height:10px;width:80%"></div>
-                <div class="sk" style="height:10px;width:70%"></div>
-                <div class="sk" style="height:10px;width:90%"></div>
-              </div>
-              <div style="margin-top:auto"><div class="sk" style="height:28px;width:100%;background:rgba(239,68,68,.25)"></div></div>
-            </div>
-            <div class="wfr">
-              <div class="wfc"><span class="wb">해운대</span></div>
-              <div class="wfc"><span class="wb">수영구</span></div>
-              <div class="wfc"><span class="wb">중구</span></div>
-              <div class="wfc" style="opacity:.4"></div>
-              <div class="wfc" style="opacity:.4"></div>
-              <div class="wfc" style="opacity:.4"></div>
-            </div>
-          </div>
-        </div>
-      </section>
+                <!-- Main Heading -->
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white mb-6 leading-tight">
+                    모두가 함께 즐기는 <br class="hidden sm:inline" />
+                    <span class="gradient-text">FESTIVAL 01</span> 스마트 웹 플랫폼
+                </h1>
 
-      <!-- 4 -->
-      <section id="techstack" class="section">
-        <div class="sh"><span class="sn">04</span><h2 class="st">기술 스택 (Tech Stack)</h2></div>
-        <div class="tc">
-          <div class="tcol">
-            <div class="tcoh">Frontend</div>
-            <div class="tr"><span class="tk">Framework</span><span class="tv">React 18, Vite</span></div>
-            <div class="tr"><span class="tk">Language</span><span class="tv">TypeScript</span></div>
-            <div class="tr"><span class="tk">Styling</span><span class="tv">Tailwind CSS (v4)</span></div>
-            <div class="tr"><span class="tk">Typography</span><span class="tv">Playfair Display, Noto Serif KR</span></div>
-            <div class="tr"><span class="tk">Icons</span><span class="tv">Lucide React</span></div>
-            <div class="tr"><span class="tk">Map Library</span><span class="tv">Leaflet, React-Leaflet</span></div>
-          </div>
-          <div class="tcol">
-            <div class="tcoh">Backend &amp; API</div>
-            <div class="tr"><span class="tk">Runtime</span><span class="tv">Node.js, Express</span></div>
-            <div class="tr"><span class="tk">Serverless</span><span class="tv">Vercel Node Functions</span></div>
-            <div class="tr"><span class="tk">AI SDK</span><span class="tv">@google/genai (Gemini API)</span></div>
-            <div class="tr"><span class="tk">Data Source</span><span class="tv">공공데이터포털 REST API</span></div>
-          </div>
-        </div>
-      </section>
+                <!-- Subtitle -->
+                <p class="max-w-3xl mx-auto text-base sm:text-xl text-slate-300 leading-relaxed mb-8">
+                    Vercel에서 빠르게 배포된 <code class="bg-slate-800 px-2 py-0.5 rounded text-accent-cyan font-mono text-sm">moon20091204-7447s-projects/festival-01</code> 프로젝트를 설명하고, <br class="hidden md:inline" />
+                    실시간 타임테이블, 부스 스마트 지도, 디지털 스탬프 투어를 대화형 인터페이스로 제공합니다.
+                </p>
 
-      <!-- 5 -->
-      <section id="design" class="section">
-        <div class="sh"><span class="sn">05</span><h2 class="st">UX &amp; 디자인 가이드라인</h2></div>
-        <div class="dg">
-          <div class="dc">
-            <div class="dct">Color Palette</div>
-            <div class="swatches" style="margin-bottom:1.5rem">
-              <div class="sw" style="background:#FDFCFB" data-l="Canvas"></div>
-              <div class="sw" style="background:#F5F2EF" data-l="Card"></div>
-              <div class="sw" style="background:#1A1A1A" data-l="Text"></div>
-              <div class="sw" style="background:#EF4444" data-l="Accent"></div>
-              <div class="sw" style="background:#E5E1DA" data-l="Border"></div>
-            </div>
-            <div style="margin-top:1.5rem;font-size:.82rem;color:var(--muted);display:flex;flex-direction:column;gap:.3rem">
-              <div><span class="code">#FDFCFB</span> — Off-white Canvas</div>
-              <div><span class="code">#1A1A1A</span> — Rich Dark Neutral</div>
-              <div><span class="code">#EF4444</span> — Live Red Badge / Accent</div>
-            </div>
-          </div>
-          <div class="dc">
-            <div class="dct">Typography</div>
-            <div class="fd">Festival</div>
-            <div style="font-size:.85rem;color:var(--muted);margin-top:.4rem">부산축제모아 Bold Editorial</div>
-            <div style="margin-top:1rem;font-size:.82rem;color:var(--muted);display:flex;flex-direction:column;gap:.3rem">
-              <div><strong>Display</strong>: Playfair Display — Black, Italic</div>
-              <div><strong>Korean</strong>: Noto Serif KR — 900</div>
-              <div><strong>Body</strong>: Sans-serif System</div>
-              <div><strong>Mono</strong>: JetBrains Mono</div>
-            </div>
-          </div>
-          <div class="dc">
-            <div class="dct">Component Rules</div>
-            <div style="font-size:.85rem;line-height:1.8">
-              <div>✦ Sharp rectangular borders (<span class="code">border-[#E5E1DA]</span>)</div>
-              <div>✦ <span class="code">rounded-none</span> 스타일 지향 (매거진 룩)</div>
-              <div>✦ 고대비 에디토리얼 타이포그래피</div>
-              <div>✦ 세리프 / 산세리프 조화 믹스</div>
-            </div>
-          </div>
-          <div class="dc">
-            <div class="dct">Design System Notes</div>
-            <div style="font-size:.85rem;line-height:1.8">
-              <div>✦ Black, Italic, Uppercase 수치/영문 헤더</div>
-              <div>✦ Tracking-tighter 레터스페이싱</div>
-              <div>✦ Live RED 뱃지로 실시간 데이터 강조</div>
-              <div>✦ 카드형 컨테이너: <span class="code">#F5F2EF</span></div>
-            </div>
-          </div>
-        </div>
-      </section>
+                <!-- Quick Action Buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+                    <button onclick="scrollToSection('lineup')" class="w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-brand-600 via-accent-purple to-accent-pink hover:opacity-90 shadow-lg shadow-brand-500/25 transition-all transform hover:-translate-y-0.5 flex items-center justify-center">
+                        <i class="fa-solid fa-ticket mr-2"></i> 타임테이블 & 라인업 보기
+                    </button>
+                    <button onclick="scrollToSection('map')" class="w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-slate-200 bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-all flex items-center justify-center">
+                        <i class="fa-solid fa-map-location-dot mr-2 text-accent-cyan"></i> 실시간 축제 지도 체험
+                    </button>
+                </div>
 
-      <!-- 6 -->
-      <section id="deploy" class="section">
-        <div class="sh"><span class="sn">06</span><h2 class="st">배포 및 이관 안내 (Deployment Guide)</h2></div>
-        <div class="dep">
-          <div class="ds"><div class="dn">1</div><div class="dc2"><h4>Repository 연결</h4><p>GitHub에 코드를 업로드한 후 Vercel에 프로젝트 연결</p></div></div>
-          <div class="ds">
-            <div class="dn">2</div>
-            <div class="dc2">
-              <h4>환경 변수 설정 (Environment Variables)</h4>
-              <p>아래 환경 변수를 Vercel 프로젝트 설정에서 등록합니다.</p>
-              <div class="ev">
-                <div class="er"><span class="ek">GEMINI_API_KEY</span><span class="ed">Google Gemini API Key</span></div>
-                <div class="er"><span class="ek">FESTIVAL_SERVICE_KEY</span><span class="ed">공공데이터포털 인증키 (미설정 시 기본 공공키 작동)</span></div>
-              </div>
-            </div>
-          </div>
-          <div class="ds"><div class="dn">3</div><div class="dc2"><h4>빌드 설정</h4><p>Framework Preset: <strong>Vite</strong> &nbsp;·&nbsp; Build Command: <span class="code">npm run build</span> &nbsp;·&nbsp; Output: <span class="code">dist</span></p></div></div>
-        </div>
-      </section>
+                <!-- Stat Counters -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto pt-8 border-t border-slate-800/80">
+                    <div class="glass-card p-4 rounded-2xl">
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">18+</div>
+                        <div class="text-xs sm:text-sm text-slate-400">라인업 아티스트</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl">
+                        <div class="text-2xl sm:text-3xl font-extrabold text-accent-pink mb-1">12팀</div>
+                        <div class="text-xs sm:text-sm text-slate-400">인기 푸드트럭</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl">
+                        <div class="text-2xl sm:text-3xl font-extrabold text-accent-cyan mb-1">100%</div>
+                        <div class="text-xs sm:text-sm text-slate-400">모바일 모드 지원</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl">
+                        <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 mb-1">&lt;0.5초</div>
+                        <div class="text-xs sm:text-sm text-slate-400">Vercel 로딩 속도</div>
+                    </div>
+                </div>
 
+            </div>
+        </section>
+
+        <!-- Project Context Bar -->
+        <section class="py-6 bg-slate-900/60 border-y border-slate-800/80">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-wrap items-center justify-between gap-4 text-sm text-slate-400">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-link text-brand-500"></i>
+                        <span class="font-medium text-slate-300">프로젝트 배포 주소:</span>
+                        <a href="https://vercel.com/moon20091204-7447s-projects/festival-01" target="_blank" class="text-accent-cyan hover:underline font-mono">
+                            vercel.com/moon20091204-7447s-projects/festival-01
+                        </a>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="inline-flex items-center"><i class="fa-solid fa-bolt text-amber-400 mr-1.5"></i> Vercel Edge Server</span>
+                        <span class="inline-flex items-center"><i class="fa-solid fa-mobile-screen text-indigo-400 mr-1.5"></i> 반응형 웹 UI</span>
+                        <span class="inline-flex items-center"><i class="fa-solid fa-shield-halved text-emerald-400 mr-1.5"></i> SSL 보안</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 1: Artist Lineup & Timetable -->
+        <section id="lineup" class="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
+                <div>
+                    <div class="text-brand-500 font-semibold text-sm tracking-wider uppercase mb-1">STAGE & PERFORMANCE</div>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white">공연 라인업 & 타임테이블</h2>
+                </div>
+                <p class="text-slate-400 text-sm mt-2 md:mt-0 max-w-md">
+                    메인 무대와 서브 무대에서 펼쳐지는 다양한 공연 일정을 실시간으로 확인하고 마음에 드는 무대를 북마크하세요.
+                </p>
+            </div>
+
+            <!-- Day Tabs & Genre Filter -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                <!-- Day Selectors -->
+                <div class="inline-flex p-1 rounded-xl bg-slate-800/80 border border-slate-700/80">
+                    <button onclick="setDay(1)" id="dayBtn1" class="px-5 py-2 rounded-lg text-sm font-semibold transition-all bg-brand-600 text-white shadow-md">DAY 1 (금)</button>
+                    <button onclick="setDay(2)" id="dayBtn2" class="px-5 py-2 rounded-lg text-sm font-semibold transition-all text-slate-400 hover:text-white">DAY 2 (토)</button>
+                    <button onclick="setDay(3)" id="dayBtn3" class="px-5 py-2 rounded-lg text-sm font-semibold transition-all text-slate-400 hover:text-white">DAY 3 (일)</button>
+                </div>
+
+                <!-- Category Filters -->
+                <div class="flex flex-wrap gap-2 text-xs">
+                    <button onclick="filterGenre('all')" class="genre-btn active px-3 py-1.5 rounded-lg bg-slate-800 text-white border border-slate-700 hover:border-brand-500">전체</button>
+                    <button onclick="filterGenre('band')" class="genre-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 border border-slate-700 hover:border-brand-500">밴드/인디</button>
+                    <button onclick="filterGenre('kpop')" class="genre-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 border border-slate-700 hover:border-brand-500">K-POP/댄스</button>
+                    <button onclick="filterGenre('hiphop')" class="genre-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 border border-slate-700 hover:border-brand-500">힙합/R&B</button>
+                    <button onclick="filterGenre('edm')" class="genre-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 border border-slate-700 hover:border-brand-500">DJ / EDM</button>
+                </div>
+            </div>
+
+            <!-- Lineup Grid -->
+            <div id="lineupGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamic cards injected by JS -->
+            </div>
+        </section>
+
+        <!-- Section 2: Interactive Festival Map -->
+        <section id="map" class="py-16 md:py-24 bg-slate-900/40 border-y border-slate-800/80">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <div class="text-accent-cyan font-semibold text-sm tracking-wider uppercase mb-1">INTERACTIVE VENUE MAP</div>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">한눈에 보는 스마트 축제 지도</h2>
+                    <p class="text-slate-400 text-sm sm:text-base">
+                        축제 장소의 주요 부스, 메인무대, 푸드트럭, 의무실 위치를 클릭하여 실시간 상세정보와 대기열 상태를 파악하세요.
+                    </p>
+                </div>
+
+                <!-- Map Canvas & Info Panel Container -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                    
+                    <!-- SVG Interactive Map -->
+                    <div class="lg:col-span-2 glass-panel p-4 sm:p-6 rounded-3xl relative overflow-hidden min-h-[380px] sm:min-h-[460px] flex flex-col justify-between">
+                        
+                        <!-- Map Control Header -->
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-4 z-10">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span class="text-xs font-bold text-slate-200">실시간 대기열 연동 지도</span>
+                            </div>
+                            <!-- Map Category Filters -->
+                            <div class="flex space-x-1.5 text-xs">
+                                <button onclick="filterMapCategory('all')" class="map-cat-btn px-2.5 py-1 rounded-md bg-brand-600 text-white font-medium">전체</button>
+                                <button onclick="filterMapCategory('stage')" class="map-cat-btn px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 hover:bg-slate-700">무대</button>
+                                <button onclick="filterMapCategory('food')" class="map-cat-btn px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 hover:bg-slate-700">푸드존</button>
+                                <button onclick="filterMapCategory('booth')" class="map-cat-btn px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 hover:bg-slate-700">체험부스</button>
+                            </div>
+                        </div>
+
+                        <!-- SVG Map Visualization -->
+                        <div class="relative w-full h-[320px] sm:h-[380px] bg-slate-950/60 rounded-2xl border border-slate-800 p-4 flex items-center justify-center overflow-hidden">
+                            <!-- Background Map Art Design -->
+                            <svg class="w-full h-full" viewBox="0 0 800 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Grass / Park background area -->
+                                <path d="M40 80 C 200 40, 600 60, 760 120 C 780 280, 720 440, 500 460 C 200 480, 40 400, 40 80 Z" fill="#1e293b" opacity="0.5"/>
+                                <!-- Pathways -->
+                                <path d="M 100 250 Q 400 200 700 250 T 400 400" stroke="#334155" stroke-width="28" stroke-linecap="round"/>
+                                <path d="M 400 100 L 400 420" stroke="#334155" stroke-width="20" stroke-linecap="round"/>
+
+                                <!-- Zones SVG Outlines -->
+                                <rect x="320" y="60" width="160" height="100" rx="16" fill="#312e81" opacity="0.4" stroke="#6366f1" stroke-width="2" stroke-dasharray="4 4"/>
+                                <text x="400" y="115" fill="#a5b4fc" font-size="14" font-weight="bold" text-anchor="middle">메인 무대 구역</text>
+
+                                <rect x="80" y="280" width="180" height="110" rx="16" fill="#831843" opacity="0.3" stroke="#ec4899" stroke-width="2" stroke-dasharray="4 4"/>
+                                <text x="170" y="340" fill="#fbcfe8" font-size="14" font-weight="bold" text-anchor="middle">푸드트럭 스트리트</text>
+
+                                <rect x="540" y="280" width="180" height="110" rx="16" fill="#164e63" opacity="0.3" stroke="#06b6d4" stroke-width="2" stroke-dasharray="4 4"/>
+                                <text x="630" y="340" fill="#a5f3fc" font-size="14" font-weight="bold" text-anchor="middle">체험 & 굿즈존</text>
+                            </svg>
+
+                            <!-- Dynamic Map Pins Overlay -->
+                            <div id="mapPinsContainer" class="absolute inset-0 pointer-events-none">
+                                <!-- Pins dynamically placed via absolute positioning in JS -->
+                            </div>
+                        </div>
+
+                        <!-- Map Legend -->
+                        <div class="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs text-slate-400">
+                            <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-brand-500 mr-1.5"></span> 메인 무대</span>
+                            <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-accent-pink mr-1.5"></span> 푸드트럭</span>
+                            <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-accent-cyan mr-1.5"></span> 체험/이벤트</span>
+                            <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-emerald-400 mr-1.5"></span> 의무실/편의</span>
+                        </div>
+                    </div>
+
+                    <!-- Map Pin Selected Detail Card -->
+                    <div class="glass-panel p-6 rounded-3xl h-full flex flex-col justify-between">
+                        <div id="mapDetailPanel">
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-brand-500/20 text-brand-300 border border-brand-500/30">
+                                    지점 정보
+                                </span>
+                                <span id="mapDetailCongestion" class="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">
+                                    여유로움 (대기 없음)
+                                </span>
+                            </div>
+
+                            <h3 id="mapDetailTitle" class="text-2xl font-bold text-white mb-2">지도를 클릭해보세요</h3>
+                            <p id="mapDetailDesc" class="text-slate-300 text-sm leading-relaxed mb-6">
+                                원하는 핀(마커)을 클릭하면 부스 설명, 현재 운영 시간, 예상 대기시간 및 메뉴 정보가 표시됩니다.
+                            </p>
+
+                            <div class="space-y-3 border-t border-slate-800 pt-4 text-xs text-slate-300">
+                                <div class="flex justify-between">
+                                    <span class="text-slate-400">운영 시간</span>
+                                    <span id="mapDetailHours" class="font-semibold text-white">10:00 - 22:00</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-slate-400">위치 안내</span>
+                                    <span id="mapDetailLocation" class="font-semibold text-white">중앙 광장 방향</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-slate-400">스탬프 투어 가능</span>
+                                    <span id="mapDetailStamp" class="font-semibold text-emerald-400">가능 (Zone 인증)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-slate-800">
+                            <button id="mapActionBtn" onclick="scrollToSection('stamps')" class="w-full py-2.5 rounded-xl font-bold text-sm bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 transition-colors">
+                                <i class="fa-solid fa-stamp text-amber-400 mr-2"></i> 이 위치에서 스탬프 찍기
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Food Truck & Booth Directory -->
+        <section id="booths" class="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
+                <div>
+                    <div class="text-accent-pink font-semibold text-sm tracking-wider uppercase mb-1">FOOD & EXPERIENCE</div>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white">푸드트럭 & 체험 부스 안내</h2>
+                </div>
+                <!-- Search bar for Food & Booths -->
+                <div class="mt-4 md:mt-0 relative w-full md:w-72">
+                    <input type="text" id="boothSearchInput" onkeyup="searchBooths()" placeholder="메뉴 또는 부스명 검색..." class="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-4 py-2.5 pl-10 text-sm text-white focus:outline-none focus:border-brand-500">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
+                </div>
+            </div>
+
+            <!-- Booths Grid -->
+            <div id="boothGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Dynamic Content injected via JS -->
+            </div>
+        </section>
+
+        <!-- Section 4: Digital Stamp Tour Mini-App -->
+        <section id="stamps" class="py-16 md:py-24 bg-gradient-to-b from-slate-900 to-slate-950 border-t border-slate-800">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="glass-panel p-6 sm:p-10 rounded-3xl border border-brand-500/30 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+                        <i class="fa-solid fa-stamp text-9xl text-brand-500"></i>
+                    </div>
+
+                    <div class="max-w-2xl mb-8">
+                        <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-brand-500/20 text-brand-300 border border-brand-500/30 mb-3 inline-block">
+                            EVENT SIMULATOR
+                        </span>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">디지털 스탬프 투어 체험</h2>
+                        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                            축제장 곳곳의 미션 스탬프 존을 직접 방문해보세요! 4개 부스의 인증 버튼을 클릭해 스탬프를 완성하면 축제 한정 리워드 쿠폰을 수령할 수 있습니다.
+                        </p>
+                    </div>
+
+                    <!-- Stamp Missions Progress -->
+                    <div class="mb-8">
+                        <div class="flex justify-between text-xs font-semibold text-slate-400 mb-2">
+                            <span>스탬프 달성도</span>
+                            <span id="stampProgressText" class="text-brand-400 font-bold">0 / 4 완료</span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-3 rounded-full overflow-hidden p-0.5 border border-slate-700">
+                            <div id="stampProgressBar" class="bg-gradient-to-r from-brand-500 via-accent-purple to-accent-pink h-full rounded-full transition-all duration-500 w-0"></div>
+                        </div>
+                    </div>
+
+                    <!-- Stamp Cards Grid -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+                        <!-- Stamp 1 -->
+                        <div id="stampCard1" class="glass-card p-4 rounded-2xl text-center border border-slate-800 flex flex-col items-center justify-between min-h-[160px]">
+                            <div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-slate-500 mb-2 font-bold text-lg stamp-icon">
+                                1
+                            </div>
+                            <div class="text-xs font-bold text-white mb-1">메인 무대 인증</div>
+                            <div class="text-[11px] text-slate-400 mb-3">개막 공연 관람하기</div>
+                            <button onclick="claimStamp(1)" id="stampBtn1" class="w-full py-1.5 rounded-lg text-xs font-bold bg-brand-600 hover:bg-brand-500 text-white transition-colors">
+                                인증하기
+                            </button>
+                        </div>
+
+                        <!-- Stamp 2 -->
+                        <div id="stampCard2" class="glass-card p-4 rounded-2xl text-center border border-slate-800 flex flex-col items-center justify-between min-h-[160px]">
+                            <div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-slate-500 mb-2 font-bold text-lg stamp-icon">
+                                2
+                            </div>
+                            <div class="text-xs font-bold text-white mb-1">푸드존 미식가</div>
+                            <div class="text-[11px] text-slate-400 mb-3">푸드트럭 이용하기</div>
+                            <button onclick="claimStamp(2)" id="stampBtn2" class="w-full py-1.5 rounded-lg text-xs font-bold bg-brand-600 hover:bg-brand-500 text-white transition-colors">
+                                인증하기
+                            </button>
+                        </div>
+
+                        <!-- Stamp 3 -->
+                        <div id="stampCard3" class="glass-card p-4 rounded-2xl text-center border border-slate-800 flex flex-col items-center justify-between min-h-[160px]">
+                            <div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-slate-500 mb-2 font-bold text-lg stamp-icon">
+                                3
+                            </div>
+                            <div class="text-xs font-bold text-white mb-1">체험 부스 모험</div>
+                            <div class="text-[11px] text-slate-400 mb-3">DIY 굿즈 체험하기</div>
+                            <button onclick="claimStamp(3)" id="stampBtn3" class="w-full py-1.5 rounded-lg text-xs font-bold bg-brand-600 hover:bg-brand-500 text-white transition-colors">
+                                인증하기
+                            </button>
+                        </div>
+
+                        <!-- Stamp 4 -->
+                        <div id="stampCard4" class="glass-card p-4 rounded-2xl text-center border border-slate-800 flex flex-col items-center justify-between min-h-[160px]">
+                            <div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-slate-500 mb-2 font-bold text-lg stamp-icon">
+                                4
+                            </div>
+                            <div class="text-xs font-bold text-white mb-1">방명록 응원하기</div>
+                            <div class="text-[11px] text-slate-400 mb-3">축제 한줄평 남기기</div>
+                            <button onclick="claimStamp(4)" id="stampBtn4" class="w-full py-1.5 rounded-lg text-xs font-bold bg-brand-600 hover:bg-brand-500 text-white transition-colors">
+                                인증하기
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Reward Claim Button Container -->
+                    <div class="text-center">
+                        <button id="rewardClaimBtn" disabled onclick="openRewardModal()" class="px-8 py-3 rounded-xl font-extrabold text-sm opacity-50 bg-slate-700 text-slate-400 cursor-not-allowed transition-all">
+                            <i class="fa-solid fa-gift mr-2"></i> 리워드 쿠폰 발급받기 (4/4 달성 필요)
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 5: Realtime Guestbook & Fan Wall -->
+        <section id="guestbook" class="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Left: Form Input -->
+                <div class="glass-panel p-6 sm:p-8 rounded-3xl h-fit">
+                    <div class="text-brand-500 font-semibold text-xs tracking-wider uppercase mb-1">COMMUNITY</div>
+                    <h2 class="text-2xl font-bold text-white mb-2">실시간 축제 방명록</h2>
+                    <p class="text-slate-400 text-xs sm:text-sm mb-6">
+                        축제 현장의 생생한 감상과 아티스트를 향한 응원 한마디를 남겨주세요!
+                    </p>
+
+                    <form id="guestbookForm" onsubmit="postComment(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">닉네임</label>
+                            <input type="text" id="gbNickname" required placeholder="예: 축제요정" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">응원 메시지</label>
+                            <textarea id="gbMessage" required rows="3" placeholder="오늘 밴드 라인업 정말 최고예요! 🔥" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 resize-none"></textarea>
+                        </div>
+
+                        <!-- Tag Emoji Selection -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">이모지 감정 태그</label>
+                            <div class="flex space-x-2">
+                                <button type="button" onclick="selectTag('🔥 불타오름')" class="tag-select-btn px-3 py-1.5 rounded-lg bg-slate-800 text-xs border border-slate-700 text-slate-300 hover:border-brand-500">🔥 불타오름</button>
+                                <button type="button" onclick="selectTag('🎵 음악 최고')" class="tag-select-btn px-3 py-1.5 rounded-lg bg-slate-800 text-xs border border-slate-700 text-slate-300 hover:border-brand-500">🎵 음악</button>
+                                <button type="button" onclick="selectTag('🍔 미식 탐방')" class="tag-select-btn px-3 py-1.5 rounded-lg bg-slate-800 text-xs border border-slate-700 text-slate-300 hover:border-brand-500">🍔 맛집</button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-brand-600 to-accent-purple hover:opacity-90 text-white shadow-md transition-all">
+                            <i class="fa-solid fa-paper-plane mr-2"></i> 메시지 등록하기
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Right: Messages Stream -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-bold text-slate-300">최신 방명록 피드</span>
+                        <span class="text-xs text-slate-500"><i class="fa-solid fa-arrows-rotate mr-1"></i> 실시간 업데이트</span>
+                    </div>
+
+                    <div id="guestbookFeed" class="space-y-3 max-h-[500px] overflow-y-auto pr-1">
+                        <!-- Dynamic Comments injected by JS -->
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 6: Vercel Project Architecture & Tech Specs -->
+        <section id="tech" class="py-16 md:py-24 bg-slate-900/60 border-t border-slate-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-3xl mx-auto mb-14">
+                    <div class="text-brand-400 font-semibold text-sm tracking-wider uppercase mb-1">PROJECT ARCHITECTURE</div>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Vercel 프로젝트 구조 & 기술 개요</h2>
+                    <p class="text-slate-400 text-sm sm:text-base">
+                        <code class="text-accent-cyan font-mono bg-slate-800 px-2 py-0.5 rounded">moon20091204-7447s-projects/festival-01</code> 프로젝트의 시스템 아키텍처와 주요 기술 스택을 소개합니다.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- Tech 1 -->
+                    <div class="glass-panel p-6 rounded-2xl border border-slate-800 hover:border-brand-500/40 transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center mb-4 text-xl">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Vercel Edge Deployment</h3>
+                        <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                            전 세계 CDN Edge 네트워크를 통한 빠른 퍼스트 페인트(FCP) 로딩 구현. 축제 현장에서 동시 접속자가 폭증해도 끊김 없는 초고속 반응속도를 보장합니다.
+                        </p>
+                    </div>
+
+                    <!-- Tech 2 -->
+                    <div class="glass-panel p-6 rounded-2xl border border-slate-800 hover:border-accent-purple/40 transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-accent-purple/20 text-accent-purple flex items-center justify-center mb-4 text-xl">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Responsive Mobile First UX</h3>
+                        <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                            축제 방문객의 95% 이상이 스마트폰으로 접속함에 착안하여, 한 손 조작과 직관적 카드 탭 UI, 터치 스탬프 기능을 최우선으로 설계했습니다.
+                        </p>
+                    </div>
+
+                    <!-- Tech 3 -->
+                    <div class="glass-panel p-6 rounded-2xl border border-slate-800 hover:border-accent-cyan/40 transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-accent-cyan/20 text-accent-cyan flex items-center justify-center mb-4 text-xl">
+                            <i class="fa-solid fa-database"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Real-Time Data State</h3>
+                        <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                            푸드트럭 혼잡도, 공연 일정 변경, 실시간 방명록 피드 등 변화하는 축제 현장 데이터를 실시간으로 동기화할 수 있는 모듈형 상태 관리 시스템.
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- GitHub / Vercel Project Info Card -->
+                <div class="mt-12 glass-panel p-6 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 border border-slate-800">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-white text-2xl">
+                            <i class="fa-solid fa-globe"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs text-slate-400 font-mono">DEPLOYMENT REF</div>
+                            <div class="text-base sm:text-lg font-bold text-white font-mono">festival-01 (moon20091204)</div>
+                            <div class="text-xs text-slate-400">Status: <span class="text-emerald-400 font-semibold">● Operational / Production</span></div>
+                        </div>
+                    </div>
+                    <a href="https://vercel.com/moon20091204-7447s-projects/festival-01" target="_blank" class="px-6 py-2.5 rounded-xl font-semibold text-xs sm:text-sm bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors">
+                        <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i> Vercel 대시보드 열기
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+                <div>
+                    <div class="flex items-center justify-center sm:justify-start space-x-2 mb-2">
+                        <div class="w-6 h-6 rounded-lg bg-brand-600 flex items-center justify-center text-white text-xs font-bold">
+                            F
+                        </div>
+                        <span class="text-lg font-extrabold text-white">FESTIVAL 01</span>
+                    </div>
+                    <p class="text-xs text-slate-400 max-w-md">
+                        2026 청춘 & 문화 페스티벌 디지털 안내 웹 애플리케이션. <br />
+                        본 웹페이지는 <code class="text-slate-300">moon20091204-7447s-projects/festival-01</code> 프로젝트의 대화형 가이드페이지입니다.
+                    </p>
+                </div>
+                <div class="flex space-x-6 text-slate-400 text-lg">
+                    <a href="#" class="hover:text-brand-400 transition-colors"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="hover:text-brand-400 transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="hover:text-brand-400 transition-colors"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#" class="hover:text-brand-400 transition-colors"><i class="fa-solid fa-share-nodes"></i></a>
+                </div>
+            </div>
+            <div class="mt-8 pt-6 border-t border-slate-900 text-center text-xs text-slate-500">
+                &copy; 2026 Festival 01 Showcase Platform. Hosted on Vercel Cloud Infrastructure.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Project Details Modal -->
+    <div id="projectModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+        <div class="glass-panel p-6 sm:p-8 rounded-3xl max-w-lg w-full border border-slate-700 shadow-2xl relative">
+            <button onclick="closeModal('projectModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl p-2">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-brand-600/30 border border-brand-500 flex items-center justify-center text-brand-400 text-xl">
+                    <i class="fa-solid fa-circle-info"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white">Festival 01 프로젝트 정보</h3>
+            </div>
+
+            <div class="space-y-3 text-sm text-slate-300 mb-6">
+                <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800">
+                    <div class="text-xs text-slate-500 mb-1">Vercel 배포 URL</div>
+                    <div class="font-mono text-accent-cyan break-all text-xs sm:text-sm">https://vercel.com/moon20091204-7447s-projects/festival-01</div>
+                </div>
+                <p>
+                    <strong>Festival 01</strong>은 사용자 중심의 편리한 축제 경험을 전달하기 위해 설계된 디지털 페스티벌 허브 프로젝트입니다.
+                </p>
+                <ul class="list-disc pl-5 space-y-1 text-xs text-slate-400">
+                    <li>실시간 무대 공연 타임테이블 및 즐겨찾기</li>
+                    <li>축제 부스 및 푸드트럭 혼잡도 안내 지도</li>
+                    <li>모바일 디지털 스탬프 투어 및 쿠폰 수령 기능</li>
+                    <li>참여형 방명록 커뮤니티 기능</li>
+                </ul>
+            </div>
+
+            <button onclick="closeModal('projectModal')" class="w-full py-2.5 rounded-xl font-bold text-sm bg-brand-600 hover:bg-brand-500 text-white transition-colors">
+                확인
+            </button>
+        </div>
     </div>
-  </main>
-</div>
 
-<script>
-window.addEventListener('scroll',()=>{
-  const ws=document.documentElement.scrollTop||document.body.scrollTop;
-  const h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
-  document.getElementById('prog').style.width=(ws/h*100)+'%';
-  const ids=['overview','audience','features','techstack','design','deploy'];
-  let cur='';
-  ids.forEach(id=>{const el=document.getElementById(id);if(el&&window.scrollY>=el.offsetTop-120)cur=id;});
-  document.querySelectorAll('.nav-list a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
-});
-</script>
+    <!-- Reward Coupon Modal -->
+    <div id="rewardModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+        <div class="glass-panel p-6 sm:p-8 rounded-3xl max-w-md w-full border border-amber-500/40 text-center relative shadow-2xl">
+            <button onclick="closeModal('rewardModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl p-2">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="w-16 h-16 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-4 text-3xl animate-bounce">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+
+            <h3 class="text-2xl font-bold text-white mb-2">축제 스탬프 완주 달성!</h3>
+            <p class="text-slate-300 text-xs sm:text-sm mb-6">
+                모든 축제 미션을 완료하셨습니다. 아래 쿠폰을 푸드존 운영 본부에 제시하고 한정판 페스티벌 굿즈를 수령하세요!
+            </p>
+
+            <!-- Virtual Coupon Ticket -->
+            <div class="bg-gradient-to-r from-amber-500/20 to-brand-600/20 border border-dashed border-amber-400 p-4 rounded-2xl mb-6">
+                <div class="text-xs text-amber-300 font-bold uppercase mb-1">FESTIVAL 01 REWARD COUPON</div>
+                <div class="text-xl font-black text-white tracking-widest font-mono">FEST-2026-VIP-99</div>
+                <div class="text-[10px] text-slate-400 mt-1">유효기간: 축제 기간 내 사용 가능</div>
+            </div>
+
+            <button onclick="copyCouponCode()" class="w-full py-2.5 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-400 text-slate-950 transition-colors">
+                <i class="fa-regular fa-copy mr-2"></i> 쿠폰 번호 복사하기
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Notification Message Box -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden max-w-sm px-4 py-3 rounded-2xl bg-slate-800 text-white border border-slate-700 shadow-xl text-sm flex items-center space-x-3 transition-all transform translate-y-2">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+        <span id="toastMessage">알림 메시지입니다.</span>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        /* -------------------------------------------------------------
+         * DATA DEFINITIONS: Lineup, Map Pins, Food Trucks, Guestbook
+         * ------------------------------------------------------------- */
+        
+        const LINEUP_DATA = [
+            // Day 1
+            { day: 1, name: "루시드 드림 (Lucid Dream)", genre: "band", time: "18:00 - 18:50", stage: "메인 무대", img: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&auto=format&fit=crop&q=80", bg: "청량한 인디 록 사운드" },
+            { day: 1, name: "네온 시티 (Neon City)", genre: "edm", time: "19:10 - 20:00", stage: "서브 무대", img: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&auto=format&fit=crop&q=80", bg: "신나는 일렉트로닉 DJ 라이브" },
+            { day: 1, name: "체리 블라썸 (Cherry B)", genre: "kpop", time: "20:20 - 21:30", stage: "메인 무대", img: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&auto=format&fit=crop&q=80", bg: "헤드라이너 걸그룹 퍼포먼스" },
+
+            // Day 2
+            { day: 2, name: "비트 크루 (Beat Crew)", genre: "hiphop", time: "17:30 - 18:30", stage: "서브 무대", img: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&auto=format&fit=crop&q=80", bg: "화려한 힙합 랩 세션" },
+            { day: 2, name: "웨이브 파크 (Wave Park)", genre: "band", time: "18:50 - 19:50", stage: "메인 무대", img: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=400&auto=format&fit=crop&q=80", bg: "서정적인 유니크 밴드" },
+            { day: 2, name: "DJ HYPER", genre: "edm", time: "20:10 - 21:40", stage: "메인 무대", img: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=400&auto=format&fit=crop&q=80", bg: "불꽃놀이 결합 메인 EDM 파티" },
+
+            // Day 3
+            { day: 3, name: "어쿠스틱 노브 (Acoustic Knob)", genre: "band", time: "16:00 - 17:00", stage: "서브 무대", img: "https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=400&auto=format&fit=crop&q=80", bg: "감성 감미로운 어쿠스틱 라이브" },
+            { day: 3, name: "스카이 라인 (Sky Line)", genre: "kpop", time: "17:30 - 18:40", stage: "메인 무대", img: "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=400&auto=format&fit=crop&q=80", bg: "청춘 피날레 K-POP 콘서트" },
+            { day: 3, name: "페스티벌 01 오케스트라", genre: "all", time: "19:00 - 20:30", stage: "메인 무대", img: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=400&auto=format&fit=crop&q=80", bg: "대단원 폐막 콜라보레이션 무대" }
+        ];
+
+        const MAP_PINS = [
+            { id: 1, cat: "stage", name: "메인 스테이지", x: "48%", y: "22%", hours: "16:00 - 22:00", congestion: "보통 (10분)", desc: "축제의 메인 헤드라이너 공연 및 이벤트 축하쇼가 열리는 대표 무대입니다.", stampAvailable: true },
+            { id: 2, cat: "food", name: "불꽃 야시장 푸드트럭", x: "20%", y: "65%", hours: "11:00 - 22:30", congestion: "혼잡 (25분 대기)", desc: "타코, 스테이크, 수제버거 등 최고의 축제 미식을 즐길 수 있는 먹거리 존입니다.", stampAvailable: true },
+            { id: 3, cat: "booth", name: "DIY 굿즈 체험존", x: "72%", y: "65%", hours: "10:00 - 19:00", congestion: "여유 (대기 없음)", desc: "나만의 축제 페이스페인팅 및 야광 팔찌 만들기 체험을 진행합니다.", stampAvailable: true },
+            { id: 4, cat: "booth", name: "운영 본부 & 의무실", x: "50%", y: "82%", hours: "24시간 운영", congestion: "여유", desc: "분실물 센터, 응급 처치 및 축제 안내 책자 배포를 제공합니다.", stampAvailable: false }
+        ];
+
+        const BOOTHS_DATA = [
+            { id: 1, name: "청춘 타코 푸드트럭", category: "푸드트럭", menu: "비프 타코, 퀘사디아", status: "보통", wait: "10분", rating: "4.9" },
+            { id: 2, name: "불타는 큐브 스테이크", category: "푸드트럭", menu: "부채살 스테이크, 감자튀김", status: "혼잡", wait: "25분", rating: "4.8" },
+            { id: 3, name: "아이스 크림 젤라또", category: "디저트", menu: "망고 젤라또, 아메리카노", status: "여유", wait: "5분", rating: "4.7" },
+            { id: 4, name: "축제 한정 MD 굿즈샵", category: "체험/쇼핑", menu: "슬로건 타월, 키링, 티셔츠", status: "보통", wait: "15분", rating: "5.0" },
+            { id: 5, name: "네온 페이스 페인팅", category: "체험부스", menu: "야광 타투, 헤어피스", status: "여유", wait: "5분", rating: "4.9" },
+            { id: 6, name: "오락실 펌프 & 인형뽑기", category: "놀이존", menu: "추억의 게임 체험", status: "여유", wait: "바로 이용", rating: "4.6" }
+        ];
+
+        let currentDay = 1;
+        let currentGenreFilter = 'all';
+        let userStamps = [false, false, false, false];
+        let selectedTag = '🔥 불타오름';
+
+        /* -------------------------------------------------------------
+         * INITIALIZATION ON WINDOW LOAD
+         * ------------------------------------------------------------- */
+        window.onload = function() {
+            renderLineup();
+            renderMapPins();
+            renderBooths(BOOTHS_DATA);
+            renderDefaultGuestbook();
+        };
+
+        /* -------------------------------------------------------------
+         * LINEUP RENDERER & FILTERS
+         * ------------------------------------------------------------- */
+        function setDay(day) {
+            currentDay = day;
+            for (let i = 1; i <= 3; i++) {
+                const btn = document.getElementById(`dayBtn${i}`);
+                if (i === day) {
+                    btn.className = "px-5 py-2 rounded-lg text-sm font-semibold transition-all bg-brand-600 text-white shadow-md";
+                } else {
+                    btn.className = "px-5 py-2 rounded-lg text-sm font-semibold transition-all text-slate-400 hover:text-white";
+                }
+            }
+            renderLineup();
+        }
+
+        function filterGenre(genre) {
+            currentGenreFilter = genre;
+            const buttons = document.querySelectorAll('.genre-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-brand-600', 'text-white');
+                btn.classList.add('bg-slate-800', 'text-slate-400');
+            });
+            event.target.classList.remove('bg-slate-800', 'text-slate-400');
+            event.target.classList.add('bg-brand-600', 'text-white');
+            renderLineup();
+        }
+
+        function renderLineup() {
+            const container = document.getElementById('lineupGrid');
+            container.innerHTML = '';
+
+            const filtered = LINEUP_DATA.filter(item => {
+                const matchDay = item.day === currentDay;
+                const matchGenre = currentGenreFilter === 'all' || item.genre === currentGenreFilter || item.genre === 'all';
+                return matchDay && matchGenre;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full py-12 text-center text-slate-500 text-sm">
+                        선택한 카테고리의 해당 일자 공연이 없습니다.
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "glass-card rounded-2xl overflow-hidden flex flex-col justify-between border border-slate-800";
+                card.innerHTML = `
+                    <div class="relative h-44 overflow-hidden">
+                        <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+                        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-md text-xs font-extrabold bg-slate-900/80 text-white border border-slate-700">
+                            ${item.stage}
+                        </span>
+                        <button onclick="toggleBookmark(this)" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-900/60 hover:bg-slate-900 text-slate-300 hover:text-accent-pink flex items-center justify-center transition-colors">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="p-5 flex-grow flex flex-col justify-between">
+                        <div>
+                            <div class="text-xs text-brand-400 font-semibold mb-1"><i class="fa-regular fa-clock mr-1"></i> ${item.time}</div>
+                            <h3 class="text-xl font-bold text-white mb-2">${item.name}</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed mb-4">${item.bg}</p>
+                        </div>
+                        <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                            <span><i class="fa-solid fa-music text-slate-500 mr-1"></i> 라이브 진행</span>
+                            <span class="text-brand-400 font-semibold">알림 설정</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function toggleBookmark(btn) {
+            const icon = btn.querySelector('i');
+            if (icon.classList.contains('fa-regular')) {
+                icon.className = "fa-solid fa-heart text-accent-pink";
+                showToast("내 관심 일정에 추가되었습니다.");
+            } else {
+                icon.className = "fa-regular fa-heart text-slate-300";
+                showToast("관심 일정에서 삭제되었습니다.");
+            }
+        }
+
+        /* -------------------------------------------------------------
+         * INTERACTIVE MAP FUNCTIONS
+         * ------------------------------------------------------------- */
+        function renderMapPins() {
+            const container = document.getElementById('mapPinsContainer');
+            container.innerHTML = '';
+
+            MAP_PINS.forEach(pin => {
+                const pinEl = document.createElement('div');
+                pinEl.style.left = pin.x;
+                pinEl.style.top = pin.y;
+                pinEl.className = "absolute -translate-x-1/2 -translate-y-1/2 pointer-events-auto cursor-pointer group";
+                
+                let colorClass = "bg-brand-500";
+                if (pin.cat === 'food') colorClass = "bg-accent-pink";
+                if (pin.cat === 'booth') colorClass = "bg-accent-cyan";
+
+                pinEl.innerHTML = `
+                    <div onclick="selectMapPin(${pin.id})" class="relative flex items-center justify-center">
+                        <span class="animate-ping absolute inline-flex h-8 w-8 rounded-full ${colorClass} opacity-40"></span>
+                        <div class="w-8 h-8 rounded-full ${colorClass} text-white font-bold text-xs flex items-center justify-center shadow-lg border-2 border-slate-900 group-hover:scale-125 transition-transform">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(pinEl);
+            });
+        }
+
+        function selectMapPin(id) {
+            const pin = MAP_PINS.find(p => p.id === id);
+            if (!pin) return;
+
+            document.getElementById('mapDetailTitle').innerText = pin.name;
+            document.getElementById('mapDetailDesc').innerText = pin.desc;
+            document.getElementById('mapDetailHours').innerText = pin.hours;
+            document.getElementById('mapDetailCongestion').innerText = pin.congestion;
+            document.getElementById('mapDetailLocation').innerText = pin.name + " 근처";
+            document.getElementById('mapDetailStamp').innerText = pin.stampAvailable ? "가능 (Zone 인증)" : "미지원";
+
+            showToast(`${pin.name} 지점이 선택되었습니다.`);
+        }
+
+        function filterMapCategory(cat) {
+            const buttons = document.querySelectorAll('.map-cat-btn');
+            buttons.forEach(b => {
+                b.className = "map-cat-btn px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 hover:bg-slate-700";
+            });
+            event.target.className = "map-cat-btn px-2.5 py-1 rounded-md bg-brand-600 text-white font-medium";
+
+            if (cat === 'all') {
+                renderMapPins();
+            } else {
+                const container = document.getElementById('mapPinsContainer');
+                container.innerHTML = '';
+                MAP_PINS.filter(p => p.cat === cat).forEach(pin => {
+                    const pinEl = document.createElement('div');
+                    pinEl.style.left = pin.x;
+                    pinEl.style.top = pin.y;
+                    pinEl.className = "absolute -translate-x-1/2 -translate-y-1/2 pointer-events-auto cursor-pointer group";
+                    pinEl.innerHTML = `
+                        <div onclick="selectMapPin(${pin.id})" class="relative flex items-center justify-center">
+                            <div class="w-8 h-8 rounded-full bg-brand-500 text-white font-bold text-xs flex items-center justify-center shadow-lg border-2 border-slate-900 group-hover:scale-125 transition-transform">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(pinEl);
+                });
+            }
+        }
+
+        /* -------------------------------------------------------------
+         * BOOTH DIRECTORY SEARCH
+         * ------------------------------------------------------------- */
+        function renderBooths(items) {
+            const container = document.getElementById('boothGrid');
+            container.innerHTML = '';
+
+            items.forEach(booth => {
+                let statusBg = "bg-emerald-500/20 text-emerald-300 border-emerald-500/30";
+                if (booth.status === '보통') statusBg = "bg-amber-500/20 text-amber-300 border-amber-500/30";
+                if (booth.status === '혼잡') statusBg = "bg-rose-500/20 text-rose-300 border-rose-500/30";
+
+                const card = document.createElement('div');
+                card.className = "glass-card p-5 rounded-2xl border border-slate-800 flex flex-col justify-between";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-[11px] font-semibold text-slate-400 bg-slate-800 px-2 py-0.5 rounded">${booth.category}</span>
+                            <span class="text-xs px-2 py-0.5 rounded border font-semibold ${statusBg}">
+                                ${booth.status} (${booth.wait})
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-1">${booth.name}</h3>
+                        <p class="text-xs text-slate-300 mb-4"><i class="fa-solid fa-utensils text-slate-500 mr-1"></i> ${booth.menu}</p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                        <span class="text-amber-400 font-bold"><i class="fa-solid fa-star mr-1"></i> ${booth.rating}</span>
+                        <button onclick="showToast('${booth.name} 대기줄에 등록되었습니다.')" class="text-brand-400 hover:underline font-semibold">
+                            대기 신청
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function searchBooths() {
+            const query = document.getElementById('boothSearchInput').value.toLowerCase();
+            const filtered = BOOTHS_DATA.filter(b => 
+                b.name.toLowerCase().includes(query) || 
+                b.menu.toLowerCase().includes(query) ||
+                b.category.toLowerCase().includes(query)
+            );
+            renderBooths(filtered);
+        }
+
+        /* -------------------------------------------------------------
+         * DIGITAL STAMP TOUR SIMULATOR
+         * ------------------------------------------------------------- */
+        function claimStamp(index) {
+            userStamps[index - 1] = true;
+            
+            const card = document.getElementById(`stampCard${index}`);
+            const btn = document.getElementById(`stampBtn${index}`);
+            const icon = card.querySelector('.stamp-icon');
+
+            card.classList.add('border-emerald-500/50', 'bg-emerald-950/20');
+            icon.className = "w-12 h-12 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center mb-2 font-bold text-lg stamp-icon";
+            icon.innerHTML = `<i class="fa-solid fa-check"></i>`;
+            
+            btn.disabled = true;
+            btn.className = "w-full py-1.5 rounded-lg text-xs font-bold bg-emerald-600/30 text-emerald-400 cursor-default";
+            btn.innerText = "인증 완료";
+
+            updateStampProgress();
+            showToast(`스탬프 #${index} 번 인증에 성공했습니다!`);
+        }
+
+        function updateStampProgress() {
+            const completed = userStamps.filter(Boolean).length;
+            const percent = (completed / 4) * 100;
+            
+            document.getElementById('stampProgressText').innerText = `${completed} / 4 완료`;
+            document.getElementById('stampProgressBar').style.width = `${percent}%`;
+
+            const rewardBtn = document.getElementById('rewardClaimBtn');
+            if (completed === 4) {
+                rewardBtn.disabled = false;
+                rewardBtn.className = "px-8 py-3 rounded-xl font-extrabold text-sm bg-gradient-to-r from-amber-500 via-brand-500 to-accent-pink text-white shadow-lg shadow-amber-500/20 hover:opacity-90 transition-all cursor-pointer animate-pulse";
+                rewardBtn.innerHTML = `<i class="fa-solid fa-gift mr-2"></i> 축제 리워드 쿠폰 발급받기 (완료!)`;
+            }
+        }
+
+        /* -------------------------------------------------------------
+         * REALTIME GUESTBOOK SIMULATOR
+         * ------------------------------------------------------------- */
+        function selectTag(tag) {
+            selectedTag = tag;
+            const buttons = document.querySelectorAll('.tag-select-btn');
+            buttons.forEach(b => {
+                b.classList.remove('border-brand-500', 'text-white');
+                b.classList.add('text-slate-300');
+            });
+            event.target.classList.add('border-brand-500', 'text-white');
+        }
+
+        function postComment(e) {
+            e.preventDefault();
+            const nickname = document.getElementById('gbNickname').value.trim();
+            const message = document.getElementById('gbMessage').value.trim();
+
+            if (!nickname || !message) return;
+
+            const feed = document.getElementById('guestbookFeed');
+            const newCard = document.createElement('div');
+            newCard.className = "glass-card p-4 rounded-2xl border border-brand-500/30 animate-fade-in";
+            newCard.innerHTML = `
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-7 h-7 rounded-full bg-brand-600 text-white font-bold text-xs flex items-center justify-center">
+                            ${nickname.charAt(0)}
+                        </span>
+                        <span class="text-sm font-bold text-white">${nickname}</span>
+                    </div>
+                    <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-brand-300 border border-slate-700">${selectedTag}</span>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-2">${message}</p>
+                <div class="text-[10px] text-slate-500 text-right">방금 전</div>
+            `;
+
+            feed.insertBefore(newCard, feed.firstChild);
+
+            // Reset Form
+            document.getElementById('gbMessage').value = '';
+            showToast("응원 방명록이 등록되었습니다!");
+
+            // Auto claim stamp #4 if not claimed yet
+            if (!userStamps[3]) {
+                claimStamp(4);
+            }
+        }
+
+        function renderDefaultGuestbook() {
+            const feed = document.getElementById('guestbookFeed');
+            const defaults = [
+                { name: "음악소년", tag: "🔥 불타오름", msg: "라인업 미쳤네요! 금요일 밴드 루시드 드림 무대 기대 중입니다!!", time: "5분 전" },
+                { name: "미식가_민서", tag: "🍔 맛집", msg: "불꽃 야시장 큐브 스테이크 진짜 맛있어요 추천추천 👍", time: "12분 전" },
+                { name: "축제마니아", tag: "🎵 음악", msg: "Vercel 웹 앱으로 스탬프 찍는 거 너무 편리하고 신기해요!", time: "25분 전" }
+            ];
+
+            defaults.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "glass-card p-4 rounded-2xl border border-slate-800";
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-7 h-7 rounded-full bg-slate-700 text-white font-bold text-xs flex items-center justify-center">
+                                ${item.name.charAt(0)}
+                            </span>
+                            <span class="text-sm font-bold text-white">${item.name}</span>
+                        </div>
+                        <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">${item.tag}</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-2">${item.msg}</p>
+                    <div class="text-[10px] text-slate-500 text-right">${item.time}</div>
+                `;
+                feed.appendChild(card);
+            });
+        }
+
+        /* -------------------------------------------------------------
+         * MODAL & TOAST UTILITIES
+         * ------------------------------------------------------------- */
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+            document.getElementById(id).classList.add('flex');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+            document.getElementById(id).classList.remove('flex');
+        }
+
+        function openRewardModal() {
+            openModal('rewardModal');
+        }
+
+        function copyCouponCode() {
+            const code = "FEST-2026-VIP-99";
+            const tempInput = document.createElement('input');
+            tempInput.value = code;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            showToast("쿠폰 번호가 클립보드에 복사되었습니다!");
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').innerText = message;
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+    </script>
 </body>
 </html>
