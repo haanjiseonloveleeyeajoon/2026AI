@@ -394,7 +394,7 @@
             </div>
 
             <!-- Card 8: 최종 성찰 내용 -->
-            <div class="card-item reflection bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-purple-400 hover:shadow-xl hover:shadow-purple-100 transition duration-300 hover:-translate-y-1.5 flex flex-col cursor-pointer group shadow-sm" onclick="openModal(8)">
+            <div class="card-item reflection bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-purple-400 hover:shadow-xl hover:shadow-purple-100 transition duration-300 hover:-translate-y-1.5 flex flex-col cursor-pointer group shadow-sm" onclick="safeNavigate('./sad/index.html')">
                 <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-purple-50 to-fuchsia-50">
                     <span class="text-xs font-bold text-purple-600 bg-purple-100/80 px-2.5 py-1 rounded-lg">08. 최종 성찰 내용</span>
                     <i class="fa-solid fa-helmet-safety text-purple-500 text-lg group-hover:scale-110 transition"></i>
@@ -408,7 +408,7 @@
                     </div>
                     <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
                         <span class="text-[11px] text-slate-500 font-medium"><i class="fa-solid fa-pen-nib text-purple-500 mr-1"></i>성찰 노터블</span>
-                        <span class="text-xs font-bold text-purple-600 group-hover:translate-x-1 transition flex items-center">열기 <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i></span>
+                        <span class="text-xs font-bold text-purple-600 group-hover:translate-x-1 transition flex items-center">이동하기 <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i></span>
                     </div>
                 </div>
             </div>
@@ -757,30 +757,6 @@
                             }
                         });
                     }, 50);
-                    break;
-
-                case 8:
-                    modalTitle.innerText = "08. 최종 성찰 내용 (문지훈 학생 종합 소감)";
-                    modalBadge.innerText = "최종 성찰 내용";
-                    modalBadge.className = "text-xs font-bold px-2.5 py-1 rounded-lg bg-purple-100 text-purple-800";
-                    modalBody.innerHTML = `
-                        <div class="space-y-4">
-                            <blockquote class="p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-2xl italic text-slate-800 text-xs sm:text-sm font-medium">
-                                "토목공학은 세상을 받치는 가장 튼튼한 골조이며, AI는 그 골조를 정밀하고 안전하게 유지시켜주는 미래의 눈입니다. 인공지능일반 수업을 통해 기술로 인류의 터전을 지키는 참된 가치를 배울 수 있었습니다."
-                            </blockquote>
-
-                            <div class="space-y-2 text-xs">
-                                <div class="p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
-                                    <strong class="text-amber-800 block mb-1">1. AI와 토목공학 융합의 깨달음</strong>
-                                    <p class="text-slate-600">단순 시공이나 계산을 넘어 빅데이터 기반의 재난 예측 및 AI 비전 기반 구조물 점검이 얼마나 큰 생명 구호 가치를 가졌는지 깨달았습니다.</p>
-                                </div>
-                                <div class="p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
-                                    <strong class="text-amber-800 block mb-1">2. 스마트 토목공학도를 향한 다짐</strong>
-                                    <p class="text-slate-600">대학 진학 후 토목공학 전공을 기반으로 AI, 드론, 센서 데이터 기술을 연마하여 자연재해로부터 안전한 스마트 시티 인프라를 건설하겠습니다.</p>
-                                </div>
-                            </div>
-                        </div>
-                    `;
                     break;
             }
 
