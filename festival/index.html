@@ -109,7 +109,7 @@
             <div class="flex items-center justify-between h-16">
                 <!-- Logo & Deployment badge -->
                 <div class="flex items-center space-x-3">
-                    <a href="#" class="flex items-center space-x-2">
+                    <a href="../index.html" class="flex items-center space-x-2">
                         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 via-accent-purple to-accent-pink flex items-center justify-center text-white shadow-lg shadow-brand-500/30">
                             <i class="fa-solid font-bold text-lg fa-compact-disc animate-spin-slow"></i>
                         </div>
@@ -122,6 +122,9 @@
 
                 <!-- Desktop Nav Navigation Links -->
                 <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <a href="../index.html" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all inline-flex items-center gap-1.5">
+                        <i class="fa-solid fa-house text-xs"></i> 홈
+                    </a>
                     <button onclick="scrollToSection('hero')" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">개요</button>
                     <button onclick="scrollToSection('lineup')" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">공연 라인업</button>
                     <button onclick="scrollToSection('map')" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">스마트 지도</button>
@@ -146,6 +149,7 @@
 
         <!-- Mobile Menu Dropdown -->
         <div id="mobileMenu" class="hidden md:hidden border-t border-slate-800 bg-slate-900/95 px-4 pt-2 pb-4 space-y-1">
+            <a href="../index.html" class="block w-full text-left px-3 py-2 rounded-md text-slate-300 hover:bg-slate-800 flex items-center gap-2"><i class="fa-solid fa-house text-xs"></i> 홈</a>
             <button onclick="scrollToSection('hero'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-slate-300 hover:bg-slate-800">개요</button>
             <button onclick="scrollToSection('lineup'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-slate-300 hover:bg-slate-800">공연 라인업</button>
             <button onclick="scrollToSection('map'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-slate-300 hover:bg-slate-800">스마트 지도</button>
@@ -632,12 +636,12 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left">
             <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div>
-                    <div class="flex items-center justify-center sm:justify-start space-x-2 mb-2">
+                    <a href="../index.html" class="inline-flex items-center justify-center sm:justify-start space-x-2 mb-2">
                         <div class="w-6 h-6 rounded-lg bg-brand-600 flex items-center justify-center text-white text-xs font-bold">
                             F
                         </div>
                         <span class="text-lg font-extrabold text-white">FESTIVAL 01</span>
-                    </div>
+                    </a>
                     <p class="text-xs text-slate-400 max-w-md">
                         2026 청춘 & 문화 페스티벌 디지털 안내 웹 애플리케이션. <br />
                         본 웹페이지는 <code class="text-slate-300">moon20091204-7447s-projects/festival-01</code> 프로젝트의 대화형 가이드페이지입니다.
